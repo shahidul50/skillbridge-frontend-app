@@ -65,10 +65,10 @@ export default function Navbar() {
 
                         {!isLoggedIn ? (
                             <>
-                                <Button variant="ghost" className="font-semibold text-foreground">Login</Button>
-                                <Button className="rounded-xl bg-primary px-6 font-bold text-primary-foreground shadow-md shadow-primary/20">
-                                    Sign Up
-                                </Button>
+        
+                                <Link href="/login"  className="font-semibold text-[14px] text-foreground text-md py-1 px-4 rounded-2xl hover:bg-muted">Login</Link>
+                                <Link href="/register"  className="rounded-xl text-[14px] bg-primary px-6 py-1.25 font-bold text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90">Sign up</Link>
+                            
                             </>
                         ) : (
                            <DropdownMenu modal={false}>

@@ -1,8 +1,9 @@
-import { Geist, Geist_Mono, Raleway } from "next/font/google"
+import { Geist_Mono, Raleway } from "next/font/google"
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/providers/theme-provider"
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 const raleway = Raleway({subsets:['latin'],variable:'--font-sans'})
 
@@ -30,6 +31,7 @@ export default function RootLayout({
          disableTransitionOnChange
         >
           {children}
+          <Toaster richColors/>
         </ThemeProvider>
       </body>
     </html>
