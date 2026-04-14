@@ -6,13 +6,13 @@ export const studentRoutes: Route[] = [
         title: "Account Management",
         items: [
             {
-                name: "Create Blog",
-                url: "/dashboard/create-blog",
+                name: "Profile",
+                url: "/dashboard/profile",
                 icon: LayoutDashboard
             },
             {
-                name: "History",
-                url: "/dashboard/history",
+                name: "Booking History",
+                url: "/dashboard/booking-history",
                 icon: LayoutDashboard
             },
         ],

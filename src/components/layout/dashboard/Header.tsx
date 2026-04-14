@@ -1,9 +1,10 @@
 "use client"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Search, LayoutDashboard } from "lucide-react"
+import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { ModeToggle } from "../ModeToogle"
 import { NotificationDropdown } from "./NotificationDropdown"
+import Link from "next/link"
 
 export function Header() {
   return (
@@ -12,9 +13,8 @@ export function Header() {
       <SidebarTrigger className="hover:bg-secondary" />
       
       {/* Left side  */}
-      <div className="hidden md:flex items-center gap-2 ml-2">
-        <LayoutDashboard className="size-4 text-muted-foreground" />
-        <h1 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Overview</h1>
+      <div className="md:flex items-center gap-2 ml-2">
+        <Link href="/" className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:border-2 border-primary rounded-md px-2 py-1">Go to Website</Link>
       </div>
         
        {/* Right side  */}

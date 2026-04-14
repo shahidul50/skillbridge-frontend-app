@@ -1,8 +1,7 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
-import { Menu, LayoutDashboard, User, LogOut, Boxes} from "lucide-react";
+import { Menu, LayoutDashboard, User, LogOut, Boxes } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
@@ -21,6 +20,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "./ModeToogle";
+import { getUserSession } from "@/actions/auth.action";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getInitials } from "@/lib/utils";
 
 const navLinks = [
     { title: "Find Tutors", href: "#" },
@@ -29,7 +33,34 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-    const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+    const [session, setSession] = useState<any>(null);
+    const router = useRouter();
+ 
+    useEffect(() => {
+        const fetchSession = async () => {
+            const sessionData = await getUserSession();
+            setSession(sessionData?.data);
+        };
+        fetchSession();
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await authClient.signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        setSession(null);
+                        router.push("/login"); // Redirect after logout
+                        router.refresh();
+                    },
+                },
+            });
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
+
+    const isLoggedIn = !!session;
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -37,8 +68,8 @@ export default function Navbar() {
 
                 {/* --- LEFT: Logo --- */}
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-md bg-emerald-500 text-white"> 
-                    <Boxes className="h-5 w-5" />
+                    <div className="p-1.5 rounded-md bg-emerald-500 text-white">
+                        <Boxes className="h-5 w-5" />
                     </div>
                     <span className="text-xl font-bold">SkillBridge</span>
                 </Link>
@@ -61,25 +92,25 @@ export default function Navbar() {
 
                     <div className="hidden md:flex items-center gap-4">
                         {/* Theme Toggle Example */}
-                        <ModeToggle/>
+                        <ModeToggle />
 
                         {!isLoggedIn ? (
                             <>
-        
-                                <Link href="/login"  className="font-semibold text-[14px] text-foreground text-md py-1 px-4 rounded-2xl hover:bg-muted">Login</Link>
-                                <Link href="/register"  className="rounded-xl text-[14px] bg-primary px-6 py-1.25 font-bold text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90">Sign up</Link>
-                            
+
+                                <Link href="/login" className="font-semibold text-[14px] text-foreground text-md py-1 px-4 rounded-2xl hover:bg-muted">Login</Link>
+                                <Link href="/register" className="rounded-xl text-[14px] bg-primary px-6 py-1.25 font-bold text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90">Sign up</Link>
+
                             </>
                         ) : (
-                           <DropdownMenu modal={false}>
+                            <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
                                     <Button
                                         variant="ghost"
                                         className="relative h-10 w-10 rounded-full border-2 border-primary/20 p-0 overflow-hidden ring-offset-background"
                                     >
                                         <Avatar className="h-full w-full">
-                                            <AvatarImage src={"https://github.com/shadcn.png"} />
-                                            <AvatarFallback>SJ</AvatarFallback>
+                                            <AvatarImage src={session?.user?.image} />
+                                            <AvatarFallback>{getInitials(session?.user?.name)}</AvatarFallback>
                                         </Avatar>
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -92,27 +123,31 @@ export default function Navbar() {
                                     <DropdownMenuLabel className="font-normal p-3 bg-background rounded-t-xl">
                                         <div className="flex flex-col space-y-1">
                                             <p className="text-[11px] font-bold uppercase text-primary tracking-widest">Logged in as</p>
-                                            <p className="text-sm font-bold truncate">alex.johnson@example.com</p>
+                                            <p className="text-sm font-bold truncate">{session?.user?.email}</p>
                                         </div>
                                     </DropdownMenuLabel>
 
                                     <DropdownMenuSeparator className="bg-border/50" />
 
                                     <DropdownMenuItem className="flex items-center gap-3 p-3 cursor-pointer rounded-xl focus:bg-accent focus:text-accent-foreground outline-none transition-colors group">
-                                        <LayoutDashboard className="h-5 w-5 text-primary" />
-                                        <span className="font-semibold text-foreground/90 group-focus:text-accent-foreground">Dashboard</span>
+                                        <Link href="/dashboard" className="flex">
+                                        <LayoutDashboard className="h-5 w-5 text-primary mr-3" />
+                                        <span className="font-semibold text-foreground/90 group-focus:text-accent-foreground ">Dashboard</span>
+                                        </Link>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuItem className="flex items-center gap-3 p-3 cursor-pointer rounded-xl focus:bg-accent focus:text-accent-foreground outline-none transition-colors group">
-                                        <User className="h-5 w-5 text-primary" />
+                                       <Link href="/dashboard/profile" className="flex">
+                                        <User className="h-5 w-5 text-primary mr-3" />
                                         <span className="font-semibold text-foreground/90 group-focus:text-accent-foreground">Profile</span>
+                                       </Link>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuSeparator className="bg-border/50" />
 
                                     <DropdownMenuItem
                                         className="flex items-center gap-3 p-3 cursor-pointer rounded-xl text-destructive focus:bg-destructive/10 focus:text-destructive outline-none font-semibold transition-colors"
-                                        onClick={() => setIsLoggedIn(false)}
+                                        onClick={handleLogout}
                                     >
                                         <LogOut className="h-5 w-5" />
                                         <span>Logout</span>
@@ -133,14 +168,14 @@ export default function Navbar() {
                             <SheetContent side="right" className="bg-background text-foreground border-border w-77.5 p-6 outline-none">
                                 <SheetHeader className="text-left mb-8 flex flex-row items-center justify-between">
                                     <SheetTitle className="text-xl font-bold">Menu</SheetTitle>
-                                    <ModeToggle/>
+                                    <ModeToggle />
                                 </SheetHeader>
 
                                 <div className="flex flex-col gap-6">
                                     {isLoggedIn && (
                                         <div className="bg-accent/50 p-4 rounded-2xl border border-border/50">
-                                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Account</p>
-                                            <p className="text-sm font-bold truncate">alex.johnson@example.com</p>
+                                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Logged in as</p>
+                                            <p className="text-sm font-bold truncate">{session?.user?.email}</p>
                                         </div>
                                     )}
 
@@ -169,7 +204,7 @@ export default function Navbar() {
                                                 <Button className="w-full bg-primary text-primary-foreground rounded-xl py-6 font-bold shadow-lg shadow-primary/20">Sign Up</Button>
                                             </>
                                         ) : (
-                                            <Button variant="destructive" className="w-full rounded-xl py-6 font-bold" onClick={() => setIsLoggedIn(false)}>
+                                            <Button variant="destructive" className="w-full rounded-xl py-6 font-bold" onClick={handleLogout}>
                                                 <LogOut className="mr-2 h-5 w-5" /> Logout
                                             </Button>
                                         )}
