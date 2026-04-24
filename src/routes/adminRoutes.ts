@@ -1,5 +1,5 @@
 import { Route } from "@/types";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, CopyPlus, Users, ShieldUser } from "lucide-react";
 export const adminRoutes: Route[] = [
     {
         title: "Overview",
@@ -17,17 +17,17 @@ export const adminRoutes: Route[] = [
             {
                 name: "Users",
                 url: "/admin-dashboard/users",
-                icon: LayoutDashboard
+                icon: Users
             },
             {
                 name: "Tutors",
                 url: "/admin-dashboard/tutors",
-                icon: LayoutDashboard
+                icon: ShieldUser
             },
             {
-                name: "Categories",
-                url: "/admin-dashboard/categories",
-                icon: LayoutDashboard
+                name: "Add Category",
+                url: "/admin-dashboard/add-category",
+                icon: CopyPlus
             },
         ],
     },

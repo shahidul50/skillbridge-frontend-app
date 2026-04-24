@@ -26,7 +26,7 @@ import SidebarUserMenu from "./SidebarUserMenu"
 
     
 
-export function AppSidebar({ user, ...props }: {user:{role:string} & React.ComponentProps<typeof Sidebar>}) {
+export function AppSidebar({ user, ...props }: {user:any} & React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const { state } = useSidebar() // check sidebar collapsible state
 
@@ -80,11 +80,11 @@ export function AppSidebar({ user, ...props }: {user:{role:string} & React.Compo
                         asChild
                         tooltip={item.name}
                         isActive={isActive}
-                        className={cn(isActive && "bg-secondary text-primary")}
+                        className={cn(isActive && "bg-primary/10 text-primary")}
                       >
                         <Link href={item.url}>
-                          <item.icon className={cn("size-4", isActive && "text-primary")} />
-                          <span>{item.name}</span>
+                          <item.icon className={cn("size-4", isActive && "text-primary dark:text-white")} />
+                          <span className={cn(isActive && "font-bold text-primary dark:text-white")}>{item.name}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
