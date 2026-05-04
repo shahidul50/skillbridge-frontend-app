@@ -26,6 +26,7 @@ import { useForm } from "@tanstack/react-form"
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 // Zod schema with password matching logic
 const formSchema = zod.object({
@@ -44,13 +45,17 @@ export function RegisterForm({
     ...props
 }: React.ComponentProps<"div">) {
 
+    const searchParams = useSearchParams();
+    const roleParam = searchParams.get("role");
+    const defaultRole = roleParam?.toUpperCase() === "TUTOR" ? "TUTOR" : roleParam?.toUpperCase() === "STUDENT" ? "STUDENT" : "";
+
     const form = useForm({
         defaultValues: {
             name: "",
             email: "",
             password: "",
             confirmPassword: "",
-            role: "",
+            role: defaultRole,
         },
         validators: {
             onChange: formSchema,
@@ -158,7 +163,7 @@ export function RegisterForm({
                                             <SelectContent>
                                                 <SelectGroup>
                                                     <SelectItem value="STUDENT">Student</SelectItem>
-                                                    <SelectItem value="TUTOR">Instructor</SelectItem>
+                                                    <SelectItem value="TUTOR">Tutor</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -193,7 +198,7 @@ export function RegisterForm({
                                 <form.Field name="confirmPassword" children={(field) => {
                                     const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                                     return (<Field>
-                                        <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                                        <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
                                         <Input
                                             id={field.name}
                                             name={field.name}

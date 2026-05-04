@@ -27,7 +27,7 @@ import { useEffect, useState } from "react";
 import { getInitials } from "@/lib/utils";
 
 const navLinks = [
-    { title: "Find Tutors", href: "#" },
+    { title: "Find Tutors", href: "/tutuors" },
     { title: "Categories", href: "#" },
     { title: "How it Works", href: "#" },
 ];

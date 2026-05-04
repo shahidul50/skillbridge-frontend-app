@@ -23,7 +23,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("antialiased", fontMono.variable, "font-sans", raleway.variable)}
     >
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider
          attribute="class"
          defaultTheme="system"
