@@ -37,8 +37,6 @@ export const tutorService = {
             }
 
             const responseData = await res.json();
-            // Assuming responseData structure is like categories: { data: ... } 
-            // Update this if the backend response structure is different
             return { error: null, data: responseData.data || responseData }
         } catch (err) {
             console.error("Fetch Error:", err)
