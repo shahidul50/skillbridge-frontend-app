@@ -39,7 +39,7 @@ export default async function FeaturedTutor() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                         {tutors.data.slice(0, 4).map((tutor: any, index: number) => (
-                            <ScrollMotion key={tutor.id} delay={index * 0.1}>
+                            <ScrollMotion key={tutor.id} delay={index * 0.1} className="h-full">
                                 <TutorCard tutor={tutor} />
                             </ScrollMotion>
                         ))}

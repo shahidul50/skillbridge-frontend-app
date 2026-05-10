@@ -5,12 +5,11 @@ import { RiStarFill, RiEyeLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 
 function TutorCard({ tutor }: { tutor: any }) {
-  console.log(tutor)
   return (
-    <Card className="group overflow-hidden border-none shadow-sm ring-1 ring-border hover:ring-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-      <div className="relative aspect-4/3 overflow-hidden">
+    <Card className="group overflow-hidden border-none shadow-sm ring-1 ring-border hover:ring-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 h-full flex flex-col">
+      <div className="relative aspect-4/3 overflow-hidden shrink-0">
         <Image
-          src={tutor.user.image || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop"}
+          src={tutor.user.image || "/hero-banner.png"}
           alt={tutor.user.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -26,21 +25,23 @@ function TutorCard({ tutor }: { tutor: any }) {
           <span className="text-[10px] text-secondary-foreground dark:text-muted">({tutor.totalReviews === 1000 ? "1k+" : tutor.totalReviews})</span>
         </div>
       </div>
-      <CardContent className="p-4 flex flex-col gap-3">
-        <div className="flex justify-between items-start">
+      <CardContent className="p-4 flex flex-col flex-1 gap-3">
+        <div className="flex justify-between items-start shrink-0">
           <div className="space-y-0.5">
-            <h4 className="font-bold text-base group-hover:text-primary transition-colors">{tutor.user.name}</h4>
-            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-tight">{tutor.title}</p>
+            <h4 className="font-bold text-base group-hover:text-primary transition-colors line-clamp-1">{tutor.user.name}</h4>
+            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-tight line-clamp-1">{tutor.title}</p>
           </div>
-          <div className="text-right">
+          <div className="text-right shrink-0">
             <span className="text-lg font-bold">Tk {tutor.hourlyRate} </span>
             <span className="text-[10px] text-muted-foreground">/hr</span>
           </div>
         </div>
         
-        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-          {tutor.bio}
-        </p>
+        <div className="min-h-10">
+          <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+            {tutor.bio}
+          </p>
+        </div>
 
         <div className="flex flex-wrap gap-1.5">
           {Array.isArray(tutor?.tutorCategories) && tutor?.tutorCategories?.map((categories: any) => (
@@ -50,7 +51,7 @@ function TutorCard({ tutor }: { tutor: any }) {
           ))}
         </div>
 
-        <div className="flex gap-2 mt-2">
+        <div className="flex gap-2 mt-auto pt-2">
           <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 text-xs font-bold transition-all shadow-md shadow-emerald-600/10">
             Book Session
           </Button>

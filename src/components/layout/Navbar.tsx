@@ -28,8 +28,8 @@ import { getInitials } from "@/lib/utils";
 
 const navLinks = [
     { title: "Find Tutors", href: "/tutors" },
-    { title: "Categories", href: "#" },
-    { title: "How it Works", href: "#" },
+    { title: "Categories", href: "/categories" },
+    { title: "How it Works", href: "/#how-it-works" },
 ];
 
 export default function Navbar() {
