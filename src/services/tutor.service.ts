@@ -1,5 +1,6 @@
 import { env } from "@/env";
 import { ServiceOptions, GetTutorParams } from "@/types";
+import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
 
@@ -41,6 +42,52 @@ export const tutorService = {
         } catch (err) {
             console.error("Fetch Error:", err)
             return { error: "Some error occurred", data: null }
+        }
+    },
+
+    updateTutor: async (formData: FormData) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors`, {
+                method: "PUT",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+                body: formData
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to update tutor", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Update Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getTutorDetailsByUserId: async () => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/profile`, {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+                next: {
+                    tags: ["tutor-profile"]
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor details", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Error:", err)
+            return { error: "An unexpected error occurred", data: null }
         }
     },
 };

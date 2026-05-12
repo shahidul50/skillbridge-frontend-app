@@ -9,7 +9,7 @@ function TutorCard({ tutor }: { tutor: any }) {
     <Card className="group overflow-hidden border-none shadow-sm ring-1 ring-border hover:ring-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 h-full flex flex-col">
       <div className="relative aspect-4/3 overflow-hidden shrink-0">
         <Image
-          src={tutor.user.image || "/hero-banner.png"}
+          src={tutor.user.image || "/images/No-image.jpg"}
           alt={tutor.user.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
