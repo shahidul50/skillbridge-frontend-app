@@ -90,4 +90,51 @@ export const tutorService = {
             return { error: "An unexpected error occurred", data: null }
         }
     },
+
+    getTutorSelectedCategories: async () => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/my-categories`, {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+                next: {
+                    tags: ["tutor-selected-categories"]
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor selected categories", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Selected Categories Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    setTutorCategories: async (categoryIds: string[]) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/add-categories`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString()
+                },
+                body: JSON.stringify({ categoryId: categoryIds })
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to set tutor categories", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Set Tutor Categories Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
 };

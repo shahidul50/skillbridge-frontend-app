@@ -21,3 +21,16 @@ export async function getTutorDetailsByUserId() {
     const res = await tutorService.getTutorDetailsByUserId();
     return res;
 }
+
+export async function getTutorSelectedCategories() {
+    const res = await tutorService.getTutorSelectedCategories();
+    return res;
+}
+
+export async function setTutorCategoriesAction(categoryIds: string[]) {
+    const res = await tutorService.setTutorCategories(categoryIds);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/my-subject");
+    }
+    return res;
+}

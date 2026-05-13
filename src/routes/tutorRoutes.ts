@@ -11,6 +11,11 @@ export const tutorRoutes: Route[] = [
                 icon: LayoutDashboard
             },
             {
+                name: "My Subjects",
+                url: "/tutor-dashboard/my-subject",
+                icon: LayoutDashboard
+            },
+            {
                 name: "Availability",
                 url: "/tutor-dashboard/availability",
                 icon: LayoutDashboard
@@ -18,11 +23,6 @@ export const tutorRoutes: Route[] = [
             {
                 name: "Exceptions",
                 url: "/tutor-dashboard/exceptions",
-                icon: LayoutDashboard
-            },
-            {
-                name: "My Subjects",
-                url: "/tutor-dashboard/my-subjects",
                 icon: LayoutDashboard
             }
         ],
