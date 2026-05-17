@@ -205,4 +205,72 @@ export const tutorService = {
             return { error: "An unexpected error occurred", data: null }
         }
     },
+
+    createTutorException: async (data: { date: string; reason: string }) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/exception`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString()
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to create tutor exception", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Create Tutor Exception Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getAllTutorException: async () => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/exception`, {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+                next: {
+                    tags: ["tutor-exceptions"]
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor exceptions", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Exceptions Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    deleteTutorException: async (id: string) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/exception/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Cookie: cookieStore.toString()
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to delete tutor exception", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Delete Tutor Exception Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
 };

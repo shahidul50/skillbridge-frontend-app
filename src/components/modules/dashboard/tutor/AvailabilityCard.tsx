@@ -1,24 +1,33 @@
 "use client";
 
-import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
+export interface SlotItem {
+  id: string;
+  start: string;
+  end: string;
+}
 
+interface AvailabilityCardProps {
+  day: string;
+  slots?: SlotItem[];
+  onDeleteSlot: (day: string, id: string) => void;
+  onOpenAddModal: (day: string) => void;
+}
 
 export default function AvailabilityCard({ 
   day, 
-  slots, 
+  slots = [], 
   onDeleteSlot, 
   onOpenAddModal 
-}) {
+}: AvailabilityCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+      className="bg-card border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
     >
       <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
         <div className="w-24 shrink-0">
@@ -27,7 +36,7 @@ export default function AvailabilityCard({
 
         <div className="flex-1 flex flex-wrap gap-3 items-center">
           <AnimatePresence mode="popLayout">
-            {slots.length > 0 ? (
+            {slots && slots.length > 0 ? (
               <>
                 {slots.map((slot) => (
                   <motion.div
@@ -40,12 +49,12 @@ export default function AvailabilityCard({
                   >
                     <div className="flex items-center gap-2 text-xs md:text-sm font-medium">
                       <span>{slot.start}</span>
-                      <span className="text-muted-foreground text-[10px] md:text-xs uppercase">to</span>
+                      <span className="text-muted-foreground text-[10px] md:text-xs uppercase font-normal">to</span>
                       <span>{slot.end}</span>
                     </div>
                     <button
                       onClick={() => onDeleteSlot(day, slot.id)}
-                      className="p-1 hover:bg-destructive/10 hover:text-destructive rounded-md transition-colors"
+                      className="p-1 hover:bg-destructive/10 hover:text-destructive rounded-md transition-colors cursor-pointer"
                     >
                       <X className="size-3.5" />
                     </button>
@@ -53,19 +62,19 @@ export default function AvailabilityCard({
                 ))}
                 <button
                   onClick={() => onOpenAddModal(day)}
-                  className="size-10 flex items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 hover:border-primary hover:text-primary transition-all text-muted-foreground"
+                  className="size-10 flex items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 hover:border-primary hover:text-primary transition-all text-muted-foreground cursor-pointer"
                 >
                   <Plus className="size-5" />
                 </button>
               </>
             ) : (
               <div className="flex items-center gap-4">
-                <span className="text-muted-foreground italic text-sm">Unavailable</span>
+                <span className="text-muted-foreground italic text-sm font-medium">Unavailable</span>
                 <Button 
                   variant="secondary" 
                   size="sm" 
                   onClick={() => onOpenAddModal(day)}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg"
                 >
                   + Add Slot
                 </Button>

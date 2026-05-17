@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Loader2
 } from 'lucide-react';
-import AvailabilityCard from '@/components/modules/dashboard/tutor/AvailabilityCard';
+import AvailabilityCard, { SlotItem } from '@/components/modules/dashboard/tutor/AvailabilityCard';
 import AddSlotModal from '@/components/modules/dashboard/tutor/AddSlotModal';
 import { 
   getWeeklyAvailableSlots, 
@@ -14,11 +14,22 @@ import {
 import { toast } from 'sonner';
 import { parse, format, compareAsc } from 'date-fns';
 
-const DAYS_OF_WEEK = [
+const DAYS_OF_WEEK: string[] = [
   'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
 ];
 
-const formatTo12h = (time24) => {
+interface AvailabilityState {
+  Monday: SlotItem[];
+  Tuesday: SlotItem[];
+  Wednesday: SlotItem[];
+  Thursday: SlotItem[];
+  Friday: SlotItem[];
+  Saturday: SlotItem[];
+  Sunday: SlotItem[];
+  [key: string]: SlotItem[];
+}
+
+const formatTo12h = (time24: string): string => {
   if (!time24) return "";
   try {
     const date = parse(time24, 'HH:mm', new Date());
@@ -28,7 +39,7 @@ const formatTo12h = (time24) => {
   }
 };
 
-const formatTo24h = (time12) => {
+const formatTo24h = (time12: string): string => {
   if (!time12) return "";
   try {
     const date = parse(time12, 'h:mm a', new Date());
@@ -38,7 +49,7 @@ const formatTo24h = (time12) => {
   }
 };
 
-const EMPTY_AVAILABILITY = {
+const EMPTY_AVAILABILITY: AvailabilityState = {
   Monday: [],
   Tuesday: [],
   Wednesday: [],
@@ -49,7 +60,7 @@ const EMPTY_AVAILABILITY = {
 };
 
 export default function AvailabilityModule() {
-  const [availability, setAvailability] = useState(EMPTY_AVAILABILITY);
+  const [availability, setAvailability] = useState<AvailabilityState>(EMPTY_AVAILABILITY);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -61,12 +72,20 @@ export default function AvailabilityModule() {
       if (res?.error) {
         toast.error(res.error);
       } else if (res?.data) {
-        const grouped = { ...EMPTY_AVAILABILITY };
+        const grouped: AvailabilityState = {
+          Monday: [],
+          Tuesday: [],
+          Wednesday: [],
+          Thursday: [],
+          Friday: [],
+          Saturday: [],
+          Sunday: [],
+        };
         // Ensure every day is initialized
         DAYS_OF_WEEK.forEach(day => grouped[day] = []);
         
         // Sort slots by start time using date-fns
-        const sortedData = [...res.data].sort((a, b) => {
+        const sortedData = [...res.data].sort((a: any, b: any) => {
           const timeA = a.startTime || "00:00";
           const timeB = b.startTime || "00:00";
           
@@ -79,7 +98,7 @@ export default function AvailabilityModule() {
           }
         });
 
-        sortedData.forEach(slot => {
+        sortedData.forEach((slot: any) => {
           if (grouped[slot.dayOfWeek]) {
             grouped[slot.dayOfWeek].push({
               id: slot.id || slot._id,
@@ -102,7 +121,7 @@ export default function AvailabilityModule() {
     fetchAvailability();
   }, [fetchAvailability]);
 
-  const deleteSlot = async (day, id) => {
+  const deleteSlot = async (day: string, id: string) => {
     try {
       const res = await deleteWeeklyAvailableSlot(id);
       if (res?.error) {
@@ -116,12 +135,12 @@ export default function AvailabilityModule() {
     }
   };
 
-  const openAddModal = (day) => {
+  const openAddModal = (day: string) => {
     setSelectedDay(day);
     setIsModalOpen(true);
   };
 
-  const handleAddSlot = async (day, slot) => {
+  const handleAddSlot = async (day: string, slot: { start: string; end: string }) => {
     try {
       const payload = {
         dayOfWeek: day,
@@ -140,8 +159,6 @@ export default function AvailabilityModule() {
       toast.error("An unexpected error occurred");
     }
   };
-
-
 
   if (isLoading && Object.values(availability).flat().length === 0) {
     return (
@@ -162,7 +179,6 @@ export default function AvailabilityModule() {
             Set your recurring weekly teaching hours.
           </p>
         </div>
-
       </div>
 
       {/* Weekly List */}

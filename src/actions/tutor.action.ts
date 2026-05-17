@@ -55,3 +55,24 @@ export async function deleteWeeklyAvailableSlot(slotId: string) {
     }
     return res;
 }
+
+export async function createTutorException(data: { date: string; reason: string }) {
+    const res = await tutorService.createTutorException(data);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/exceptions");
+    }
+    return res;
+}
+
+export async function getAllTutorException() {
+    const res = await tutorService.getAllTutorException();
+    return res;
+}
+
+export async function deleteTutorException(id: string) {
+    const res = await tutorService.deleteTutorException(id);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/exceptions");
+    }
+    return res;
+}
