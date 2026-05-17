@@ -9,3 +9,8 @@ export interface GetTutorParams {
     [key: string]: string | number | undefined;
 }
 
+export interface IWeeklyAvailableSlot {
+    dayOfWeek: string;
+    startTime: string;
+    endTime: string;
+}

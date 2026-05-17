@@ -1,7 +1,7 @@
 "use server";
 
 import { tutorService } from "@/services/tutor.service";
-import { GetTutorParams } from "@/types/tutors.type";
+import { GetTutorParams, IWeeklyAvailableSlot } from "@/types/tutors.type";
 import { revalidatePath } from "next/cache";
 
 export async function getAllTutor(params?: GetTutorParams) {
@@ -31,6 +31,27 @@ export async function setTutorCategoriesAction(categoryIds: string[]) {
     const res = await tutorService.setTutorCategories(categoryIds);
     if (!res.error) {
         revalidatePath("/tutor-dashboard/my-subject");
+    }
+    return res;
+}
+
+export async function getWeeklyAvailableSlots() {
+    const res = await tutorService.getWeeklyAvailableSlots();
+    return res;
+}
+
+export async function createWeeklyAvailableSlot(data: IWeeklyAvailableSlot) {
+    const res = await tutorService.createWeeklyAvailableSlot(data);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/availability");
+    }
+    return res;
+}
+
+export async function deleteWeeklyAvailableSlot(slotId: string) {
+    const res = await tutorService.deleteWeeklyAvailableSlot(slotId);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/availability");
     }
     return res;
 }

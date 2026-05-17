@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { ServiceOptions, GetTutorParams } from "@/types";
+import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -111,6 +111,74 @@ export const tutorService = {
             return { error: null, data: result.data || result }
         } catch (err) {
             console.error("Fetch Tutor Selected Categories Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getWeeklyAvailableSlots: async () => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/weekly-available-slots`, {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+                next: {
+                    tags: ["tutor-weekly-available-slots"]
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor weekly available slots", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Weekly Available Slots Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    createWeeklyAvailableSlot: async (data: IWeeklyAvailableSlot) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/weekly-available`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString()
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to create weekly available slot", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Create Weekly Available Slot Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    deleteWeeklyAvailableSlot: async (slotId: string) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/weekly-available/${slotId}`, {
+                method: "DELETE",
+                headers: {
+                    Cookie: cookieStore.toString()
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to delete weekly available slot", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Delete Weekly Available Slot Error:", err)
             return { error: "An unexpected error occurred", data: null }
         }
     },
