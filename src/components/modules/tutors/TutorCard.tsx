@@ -3,8 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { RiStarFill, RiEyeLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function TutorCard({ tutor }: { tutor: any }) {
+
   return (
     <Card className="group overflow-hidden border-none shadow-sm ring-1 ring-border hover:ring-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 h-full flex flex-col">
       <div className="relative aspect-4/3 overflow-hidden shrink-0">
@@ -55,8 +57,10 @@ function TutorCard({ tutor }: { tutor: any }) {
           <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 text-xs font-bold transition-all shadow-md shadow-emerald-600/10">
             Book Session
           </Button>
-          <Button variant="outline" size="icon" className="size-9 rounded-lg border-muted-foreground/20 hover:border-primary hover:text-primary">
-            <RiEyeLine className="size-4" />
+          <Button asChild variant="outline" size="icon" className="size-9 rounded-lg border-muted-foreground/20 hover:border-primary hover:text-primary">
+            <Link href={`/tutors/${tutor.id}`}>
+              <RiEyeLine className="size-4" />
+            </Link>
           </Button>
         </div>
       </CardContent>

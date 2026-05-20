@@ -22,6 +22,16 @@ export async function getTutorDetailsByUserId() {
     return res;
 }
 
+export async function getTutorProfileByProfileId(profileId: string) {
+    const res = await tutorService.getTutorProfileByProfileId(profileId);
+    return res;
+}
+
+export async function getAvailableSlots(tutorProfileId: string, startDate: string) {
+    const res = await tutorService.getAvailableSlots(tutorProfileId, startDate);
+    return res;
+}
+
 export async function getTutorSelectedCategories() {
     const res = await tutorService.getTutorSelectedCategories();
     return res;
@@ -50,6 +60,14 @@ export async function createWeeklyAvailableSlot(data: IWeeklyAvailableSlot) {
 
 export async function deleteWeeklyAvailableSlot(slotId: string) {
     const res = await tutorService.deleteWeeklyAvailableSlot(slotId);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/availability");
+    }
+    return res;
+}
+
+export async function updateWeeklyAvailableSlot(slotId: string, data: { isActive: boolean }) {
+    const res = await tutorService.updateWeeklyAvailableSlot(slotId, data);
     if (!res.error) {
         revalidatePath("/tutor-dashboard/availability");
     }

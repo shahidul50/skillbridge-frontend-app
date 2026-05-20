@@ -91,6 +91,64 @@ export const tutorService = {
         }
     },
 
+    getTutorProfileByProfileId: async (profileId: string, options?: ServiceOptions) => {
+        try {
+            const config: RequestInit = {};
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-profile-details"] };
+
+            const res = await fetch(`${API_URL}/tutors/${profileId}`, config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor profile", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Profile Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getAvailableSlots: async (tutorProfileId: string, startDate: string, options?: ServiceOptions) => {
+        try {
+            const url = new URL(`${API_URL}/tutors/available-slots`);
+            url.searchParams.append("tutorProfileId", tutorProfileId);
+            url.searchParams.append("startDate", startDate);
+
+            const config: RequestInit = {};
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-available-slots"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch available slots", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Available Slots Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
     getTutorSelectedCategories: async () => {
         try {
             const cookieStore = await cookies();
@@ -142,7 +200,7 @@ export const tutorService = {
     createWeeklyAvailableSlot: async (data: IWeeklyAvailableSlot) => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/weekly-available`, {
+            const res = await fetch(`${API_URL}/tutors/weekly-available-slots`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -162,10 +220,12 @@ export const tutorService = {
         }
     },
 
+
+
     deleteWeeklyAvailableSlot: async (slotId: string) => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/weekly-available/${slotId}`, {
+            const res = await fetch(`${API_URL}/tutors/weekly-available-slots/${slotId}`, {
                 method: "DELETE",
                 headers: {
                     Cookie: cookieStore.toString()
@@ -179,6 +239,29 @@ export const tutorService = {
             return { error: null, data: result }
         } catch (err) {
             console.error("Delete Weekly Available Slot Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    updateWeeklyAvailableSlot: async (slotId: string, data: { isActive: boolean }) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/weekly-available-slots/${slotId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString()
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to update weekly available slot", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Update Weekly Available Slot Error:", err)
             return { error: "An unexpected error occurred", data: null }
         }
     },
