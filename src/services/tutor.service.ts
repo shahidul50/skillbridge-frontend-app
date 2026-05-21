@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot } from "@/types";
+import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -173,7 +173,7 @@ export const tutorService = {
         }
     },
 
-    getWeeklyAvailableSlots: async () => {
+    getWeeklyAvailableSlots: async (): Promise<{ error: string | null; data: AvailabilitySlot[] | null }> => {
         try {
             const cookieStore = await cookies();
             const res = await fetch(`${API_URL}/tutors/weekly-available-slots`, {

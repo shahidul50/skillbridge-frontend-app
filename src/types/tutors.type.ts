@@ -56,3 +56,11 @@ export interface ITutorDetails {
     totalUniqueStudents: number;
     tutorSelectedCategory: ITutorSelectedCategory[];
 }
+
+export interface AvailabilitySlot {
+    id: string;
+    dayOfWeek: string;
+    startTime: string;
+    endTime: string;
+    isActive: boolean;
+}
