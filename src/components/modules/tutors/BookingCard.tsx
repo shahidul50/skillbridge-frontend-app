@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   format,
@@ -16,6 +17,8 @@ import {
   differenceInCalendarDays
 } from "date-fns";
 import { getAvailableSlots } from "@/actions/tutor.action";
+import { getUserSession } from "@/actions/auth.action";
+import { Roles } from "@/constants/roles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -79,6 +82,7 @@ const hasValidDateInWeek = (weekStart: Date) => {
 };
 
 export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: BookingCardProps) {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 6 }));
   const [slots, setSlots] = useState<any[]>([]);
@@ -169,16 +173,38 @@ export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: B
     });
   };
 
-  const handleBookNow = () => {
+  const handleBookNow = async () => {
     if (!selectedSlot) {
       toast.error("Please select an available slot first.");
       return;
     }
-    const start = formatTo12Hour(selectedSlot.start || selectedSlot.startTime);
-    const end = formatTo12Hour(selectedSlot.end || selectedSlot.endTime);
-    const dateFormatted = format(selectedDate, "PPP");
-    
-    toast.success(`Booking request sent for ${tutorName} on ${dateFormatted} at ${start} To ${end}!`);
+
+    // Role check before proceeding
+    const sessionResponse = await getUserSession();
+    const user = sessionResponse?.data?.user;
+
+    if (!user) {
+      toast.info("Please login to book a session.");
+      router.push(`/login?callbackUrl=${window.location.pathname}${window.location.search}`);
+      return;
+    }
+
+    if (user.role !== Roles.student) {
+      toast.error("Access denied. Only students can book a session.");
+      return;
+    }
+
+    const startTime = selectedSlot.start || selectedSlot.startTime;
+    const endTime = selectedSlot.end || selectedSlot.endTime;
+    const dateFormatted = format(selectedDate, "yyyy-MM-dd");
+
+    const queryParams = new URLSearchParams({
+      date: dateFormatted,
+      startTime,
+      endTime,
+    });
+
+    router.push(`/tutors/${tutorProfileId}/book?${queryParams.toString()}`);
   };
 
   return (

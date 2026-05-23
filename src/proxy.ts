@@ -23,7 +23,9 @@ export async function proxy(request: NextRequest) {
 
     // If user is not authenticated and trying to access a protected route
     if (!sessionToken && !isAuthRoute) {
-        return NextResponse.redirect(new URL('/login', request.url));
+        const url = new URL('/login', request.url);
+        url.searchParams.set('callbackUrl', pathname + request.nextUrl.search);
+        return NextResponse.redirect(url);
     }
 
     // 2. Role-Based Access Control
@@ -81,5 +83,7 @@ export const config = {
         '/tutor-dashboard/:path*',
         '/login',
         '/register',
+        '/tutors/:id/book',
+        '/tutors/:id/book/success',
     ],
 };

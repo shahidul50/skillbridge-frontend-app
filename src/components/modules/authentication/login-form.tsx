@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth-client"
 import { useForm } from "@tanstack/react-form";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner"
 import * as zod from "zod";
 
@@ -18,6 +19,8 @@ const formSchema = zod.object({
 });
 
 export function LoginForm() {
+    const searchParams = useSearchParams();
+    const callbackURL = searchParams.get("callbackUrl") || "/dashboard";
 
     const form = useForm({
         defaultValues: { email: "", password: "" },
@@ -28,7 +31,7 @@ export function LoginForm() {
             const { data, error } = await authClient.signIn.email({
                 email: value.email,
                 password: value.password,
-                callbackURL: "/dashboard"
+                callbackURL: callbackURL
             });
 
             console.log("Logging: ", data)
