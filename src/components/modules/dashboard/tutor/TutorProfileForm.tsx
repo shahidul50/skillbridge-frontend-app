@@ -1,6 +1,6 @@
 "use client";
 
-import { RiPencilLine } from "@remixicon/react";
+import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -173,7 +173,7 @@ export const TutorProfileForm = () => {
                     onClick={() => document.getElementById("profilePhoto")?.click()}
                     className="absolute bottom-0 right-0 size-8 rounded-full bg-[#22c55e] hover:bg-[#1eb054] text-white border-2 border-white dark:border-zinc-950 shadow-sm transition-all"
                   >
-                    <RiPencilLine className="size-4" />
+                    <Pencil className="size-4" />
                   </Button>
                 </div>
                 <div className="space-y-2 text-center sm:text-left">

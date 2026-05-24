@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RiSearchLine } from "@remixicon/react";
+import { Search } from "lucide-react";
 
 export const CategorySearch = () => {
   const router = useRouter();
@@ -26,7 +26,7 @@ export const CategorySearch = () => {
   return (
     <div className="max-w-2xl mx-auto mb-12">
       <div className="relative flex items-center gap-2 p-2 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-border group focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all duration-300">
-        <RiSearchLine className="ml-3 size-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+        <Search className="ml-3 size-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
         <Input
           type="text"
           placeholder="Search for a subject (e.g., Quantum Physics, UX Design)..."

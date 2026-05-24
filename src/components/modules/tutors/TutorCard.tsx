@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { RiStarFill, RiEyeLine } from "@remixicon/react";
+import { Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -22,7 +22,7 @@ function TutorCard({ tutor }: { tutor: any }) {
           </Badge>
         )}
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5 flex items-center gap-1 shadow-sm">
-          <RiStarFill className="size-3 text-amber-500" />
+          <Star className="size-3 text-amber-500" />
           <span className="text-[11px] font-bold dark:text-black">{tutor.rating}</span>
           <span className="text-[10px] text-secondary-foreground dark:text-muted">({tutor.totalReviews === 1000 ? "1k+" : tutor.totalReviews})</span>
         </div>
@@ -59,7 +59,7 @@ function TutorCard({ tutor }: { tutor: any }) {
           </Button>
           <Button asChild variant="outline" size="icon" className="size-9 rounded-lg border-muted-foreground/20 hover:border-primary hover:text-primary">
             <Link href={`/tutors/${tutor.id}`}>
-              <RiEyeLine className="size-4" />
+              <Eye className="size-4" />
             </Link>
           </Button>
         </div>

@@ -23,12 +23,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  RiArrowLeftSLine,
-  RiArrowRightSLine,
-  RiCheckboxCircleFill,
-  RiVideoChatLine,
-  RiFlashlightFill
-} from "@remixicon/react";
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle,
+  Video,
+  Zap
+} from "lucide-react";
 import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
@@ -220,7 +220,7 @@ export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: B
             </div>
             <div className="flex">
               <Badge className="bg-emerald-50 hover:bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 border-none font-semibold text-[11px] py-1 px-2.5 rounded-lg flex items-center gap-1">
-                <RiFlashlightFill className="size-3 text-emerald-500" />
+                <Zap className="size-3 text-emerald-500" />
                 Instant Booking Available
               </Badge>
             </div>
@@ -240,7 +240,7 @@ export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: B
                   }`}
                   onClick={handlePrevWeek}
                 >
-                  <RiArrowLeftSLine className="size-4" />
+                  <ChevronLeft className="size-4" />
                 </Button>
                 <Button
                   variant="outline"
@@ -251,7 +251,7 @@ export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: B
                   }`}
                   onClick={handleNextWeek}
                 >
-                  <RiArrowRightSLine className="size-4" />
+                  <ChevronRight className="size-4" />
                 </Button>
               </div>
             </div>
@@ -355,11 +355,11 @@ export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: B
           </h4>
           <ul className="space-y-3">
             <li className="flex items-start gap-2.5 text-xs text-zinc-600 dark:text-zinc-400">
-              <RiCheckboxCircleFill className="size-4 text-emerald-500 shrink-0 mt-0.5" />
+              <CheckCircle className="size-4 text-emerald-500 shrink-0 mt-0.5" />
               <span>100% Satisfaction Guarantee</span>
             </li>
             <li className="flex items-start gap-2.5 text-xs text-zinc-600 dark:text-zinc-400">
-              <RiVideoChatLine className="size-4 text-emerald-500 shrink-0 mt-0.5" />
+              <Video className="size-4 text-emerald-500 shrink-0 mt-0.5" />
               <span>Secure HD Video Sessions</span>
             </li>
           </ul>

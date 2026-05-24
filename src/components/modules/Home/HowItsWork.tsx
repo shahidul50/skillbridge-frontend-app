@@ -1,25 +1,25 @@
 import { Container } from "@/components/layout/Container";
 import { ScrollMotion } from "@/components/motion/ScrollMotion";
-import { RiSearchLine, RiCalendarCheckLine, RiFlashlightLine } from "@remixicon/react";
+import { Search, CalendarCheck, Zap } from "lucide-react";
 
 const steps = [
   {
     id: 1,
     title: "1. Find your tutor",
     description: "Browse through our directory of thousands of expert tutors and find the one that fits your needs.",
-    icon: <RiSearchLine className="size-8 text-white" />,
+    icon: <Search className="size-8 text-white" />,
   },
   {
     id: 2,
     title: "2. Book a session",
     description: "Check availability and schedule your first lesson at a time that works best for your schedule.",
-    icon: <RiCalendarCheckLine className="size-8 text-white" />,
+    icon: <CalendarCheck className="size-8 text-white" />,
   },
   {
     id: 3,
     title: "3. Start learning",
     description: "Join your virtual classroom and begin mastering your new skills with 1-on-1 expert guidance.",
-    icon: <RiFlashlightLine className="size-8 text-white" />,
+    icon: <Zap className="size-8 text-white" />,
   },
 ];
 

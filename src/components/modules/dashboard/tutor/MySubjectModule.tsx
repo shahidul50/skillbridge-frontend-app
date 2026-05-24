@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RiInformationLine, RiLoader2Line } from "@remixicon/react";
+import { Info, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { setTutorCategoriesAction } from "@/actions/tutor.action";
 import { cn } from "@/lib/utils";
@@ -104,7 +104,7 @@ export const MySubjectModule = ({ allCategories, initialSelectedIds }: MySubject
               >
                 {isUpdating ? (
                   <>
-                    <RiLoader2Line className="mr-2 size-4 animate-spin" />
+                    <Loader2 className="mr-2 size-4 animate-spin" />
                     Saving...
                   </>
                 ) : (
@@ -118,7 +118,7 @@ export const MySubjectModule = ({ allCategories, initialSelectedIds }: MySubject
 
       <div className="bg-emerald-50/50 dark:bg-emerald-950/10 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-5 md:p-6 flex gap-4">
         <div className="shrink-0 size-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-          <RiInformationLine className="size-5 text-emerald-600 dark:text-emerald-400" />
+          <Info className="size-5 text-emerald-600 dark:text-emerald-400" />
         </div>
         <div className="space-y-1">
           <h4 className="font-bold text-emerald-900 dark:text-emerald-100">Subject Verification</h4>

@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import TutorCard from "./TutorCard";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -88,7 +88,7 @@ function FindTutorMainContent({ tutors, meta }: { tutors: any[]; meta: any }) {
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
-            <RiArrowLeftSLine className="size-4" />
+            <ChevronLeft className="size-4" />
           </Button>
           <div className="flex items-center gap-1">
             {pages.map((page) => (
@@ -111,7 +111,7 @@ function FindTutorMainContent({ tutors, meta }: { tutors: any[]; meta: any }) {
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
-            <RiArrowRightSLine className="size-4" />
+            <ChevronRight className="size-4" />
           </Button>
         </div>
       )}

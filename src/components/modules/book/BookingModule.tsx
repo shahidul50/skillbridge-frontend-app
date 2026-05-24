@@ -22,15 +22,15 @@ import { useForm } from "@tanstack/react-form"
 import * as zod from "zod";
 import { Roles } from "@/constants/roles";
 import {
-  RiArrowLeftLine,
-  RiCalendarLine,
-  RiTimeLine,
-  RiStarFill,
-  RiFileCopyLine,
-  RiShieldCheckLine,
-  RiCheckboxCircleFill,
-  RiPriceTag3Line,
-} from "@remixicon/react";
+  ArrowLeft,
+  Calendar,
+  Clock,
+  Star,
+  Copy,
+  ShieldCheck,
+  CheckCircle,
+  Tag,
+} from "lucide-react";
 import { TPaymentAccountDetails } from "@/types";
 
 interface BookingModuleProps {
@@ -242,7 +242,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
         href={`/tutors/${tutor.id}`}
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors mb-6 md:mb-8 group"
       >
-        <RiArrowLeftLine className="size-4 group-hover:-translate-x-0.5 transition-transform" />
+        <ArrowLeft className="size-4 group-hover:-translate-x-0.5 transition-transform" />
         Back to Profile
       </Link>
 
@@ -274,7 +274,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
                     {tutor.title}
                   </p>
                   <div className="flex items-center gap-1">
-                    <RiStarFill className="size-3.5 text-amber-500" />
+                    <Star className="size-3.5 text-amber-500" />
                     <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
                       {tutor.rating}
                     </span>
@@ -286,7 +286,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
               <div className="space-y-4 pt-2">
                 <div className="flex items-start gap-3">
                   <div className="size-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center shrink-0">
-                    <RiCalendarLine className="size-4 text-emerald-600 dark:text-emerald-400" />
+                    <Calendar className="size-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
@@ -300,7 +300,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
 
                 <div className="flex items-start gap-3">
                   <div className="size-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center shrink-0">
-                    <RiTimeLine className="size-4 text-emerald-600 dark:text-emerald-400" />
+                    <Clock className="size-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
@@ -314,7 +314,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
 
                 <div className="flex items-start gap-3">
                   <div className="size-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center shrink-0">
-                    <RiPriceTag3Line className="size-4 text-emerald-600 dark:text-emerald-400" />
+                    <Tag className="size-4 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
@@ -359,7 +359,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
 
           {/* Secure Transaction Badge */}
           <div className="flex items-center justify-center gap-1.5 mt-4">
-            <RiCheckboxCircleFill className="size-4 text-emerald-500" />
+            <CheckCircle className="size-4 text-emerald-500" />
             <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
               100% Secure Transaction
             </span>
@@ -391,7 +391,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
               <div className="bg-emerald-50/50 dark:bg-emerald-950/10 border border-emerald-200/60 dark:border-emerald-900/30 rounded-xl p-5 space-y-3">
                 <div className="flex items-center gap-2">
                   <div className="size-6 rounded-md bg-emerald-600 flex items-center justify-center">
-                    <RiShieldCheckLine className="size-3.5 text-white" />
+                    <ShieldCheck className="size-3.5 text-white" />
                   </div>
                   <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white uppercase tracking-wider">
                     Manual Payment Details
@@ -413,7 +413,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
                     onClick={handleCopy}
                     className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors cursor-pointer"
                   >
-                    <RiFileCopyLine className="size-4" />
+                    <Copy className="size-4" />
                     <span className="text-xs font-bold">
                       {copied ? "Copied!" : "Copy"}
                     </span>
@@ -512,7 +512,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
                                 </FieldLabel>
                                 <div className="relative">
                                     <div className="absolute left-3 top-2.5">
-                                        <RiFileCopyLine className="size-4 text-zinc-400" />
+                                        <Copy className="size-4 text-zinc-400" />
                                     </div>
                                     <Input
                                         id={field.name}
@@ -545,7 +545,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
                                 disabled={!canSubmit || isSubmitting}
                                 className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-bold h-14 rounded-xl shadow-lg shadow-emerald-600/20 cursor-pointer text-base flex items-center justify-center gap-2"
                             >
-                                <RiShieldCheckLine className="size-5" />
+                                <ShieldCheck className="size-5" />
                                 {isSubmitting
                                     ? "Processing..."
                                     : `Pay & Book • Tk ${total.toFixed(2)}`}
@@ -564,7 +564,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
 
               {/* Manual Verification Badge */}
               <div className="border-t border-zinc-100 dark:border-zinc-800 pt-5 flex items-center justify-center gap-1.5">
-                <RiShieldCheckLine className="size-4 text-emerald-500" />
+                <ShieldCheck className="size-4 text-emerald-500" />
                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
                   Manual Verification
                 </span>

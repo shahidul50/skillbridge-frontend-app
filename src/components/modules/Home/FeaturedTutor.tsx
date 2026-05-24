@@ -2,7 +2,7 @@ import { tutorService } from "@/services/tutor.service";
 import TutorCard from "../tutors/TutorCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { RiArrowRightLine } from "@remixicon/react";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { ScrollMotion } from "@/components/motion/ScrollMotion";
 
@@ -31,7 +31,7 @@ export default async function FeaturedTutor() {
                             <Link href="/tutors">
                                 <Button variant="ghost" className="group font-bold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 transition-all p-0 h-auto">
                                     Browse All Tutors
-                                    <RiArrowRightLine className="ml-1 size-5 group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight className="ml-1 size-5 group-hover:translate-x-1 transition-transform" />
                                 </Button>
                             </Link>
                         </div>

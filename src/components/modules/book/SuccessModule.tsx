@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  RiCheckboxCircleFill,
-  RiUser3Line,
-  RiCalendarEventLine,
-  RiTimeLine,
-  RiInformationLine,
-} from "@remixicon/react";
+  CheckCircle,
+  User,
+  Calendar,
+  Clock,
+  Info,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -93,7 +93,7 @@ export default function SuccessModule({ bookingDetails }: SuccessModuleProps) {
     <Container className="py-12 md:py-20 flex flex-col items-center">
       {/* Success Icon */}
       <div className="size-20 md:size-24 rounded-full bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center mb-8">
-        <RiCheckboxCircleFill className="size-12 md:size-16 text-emerald-500" />
+        <CheckCircle className="size-12 md:size-16 text-emerald-500" />
       </div>
 
       {/* Header */}
@@ -109,7 +109,7 @@ export default function SuccessModule({ bookingDetails }: SuccessModuleProps) {
 
         {/* Verification Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-800/50 rounded-full">
-          <RiInformationLine className="size-4 text-zinc-500 dark:text-zinc-400" />
+          <Info className="size-4 text-zinc-500 dark:text-zinc-400" />
           <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400">
             Verification typically takes 2-5 minutes.
           </span>
@@ -142,7 +142,7 @@ export default function SuccessModule({ bookingDetails }: SuccessModuleProps) {
 
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <RiUser3Line className="size-5 text-zinc-400 shrink-0" />
+                <User className="size-5 text-zinc-400 shrink-0" />
                 <p className="text-sm md:text-base font-semibold text-zinc-700 dark:text-zinc-300">
                   Tutor:{" "}
                   <span className="text-zinc-900 dark:text-white">
@@ -152,14 +152,14 @@ export default function SuccessModule({ bookingDetails }: SuccessModuleProps) {
               </div>
 
               <div className="flex items-center gap-3">
-                <RiCalendarEventLine className="size-5 text-zinc-400 shrink-0" />
+                <Calendar className="size-5 text-zinc-400 shrink-0" />
                 <p className="text-sm md:text-base font-semibold text-zinc-700 dark:text-zinc-300">
                   {data.date}
                 </p>
               </div>
 
               <div className="flex items-center gap-3">
-                <RiTimeLine className="size-5 text-zinc-400 shrink-0" />
+                <Clock className="size-5 text-zinc-400 shrink-0" />
                 <p className="text-sm md:text-base font-semibold text-zinc-700 dark:text-zinc-300">
                   {data.timeRange}
                 </p>

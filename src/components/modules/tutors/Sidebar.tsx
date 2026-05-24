@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { RiSearchLine, RiFilter3Line, RiUserAddFill } from "@remixicon/react";
+import { Search, Filter, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -76,7 +76,7 @@ function FindTutorSidebar({ categories }: { categories: any[] }) {
         <CardContent className="p-5 flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-lg flex items-center gap-2">
-              <RiFilter3Line className="size-5 text-primary" />
+              <Filter className="size-5 text-primary" />
               Filters
             </h3>
             <button
@@ -93,7 +93,7 @@ function FindTutorSidebar({ categories }: { categories: any[] }) {
               Subjects
             </label>
             <div className="relative">
-              <RiSearchLine className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <Input
                 placeholder="Search subjects..."
                 className="pl-9 h-10 bg-muted/30 border-none ring-1 ring-border focus-visible:ring-primary/50"
@@ -196,7 +196,7 @@ function FindTutorSidebar({ categories }: { categories: any[] }) {
             onClick={applyFilters}
             className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 mt-2"
           >
-            <RiFilter3Line className="size-4" />
+            <Filter className="size-4" />
             Apply Filters
           </Button>
         </CardContent>
@@ -216,7 +216,7 @@ function FindTutorSidebar({ categories }: { categories: any[] }) {
             Be a Tutor
           </Button> */}
           <Link href="/register?role=tutor" className="bg-emerald-600 flex items-center justify-center gap-2 hover:bg-emerald-700 text-white rounded-lg h-10">
-            <RiUserAddFill className="size-4" />
+            <UserPlus className="size-4" />
             Be a Tutor
           </Link>
 

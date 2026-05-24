@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { RiStarFill, RiCheckboxCircleFill } from "@remixicon/react";
+import { Star, CheckCircle, Clock, Users } from "lucide-react";
 import BookingCard from "./BookingCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,7 +83,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
                   <h1 className="text-2xl md:text-3xl font-extrabold text-zinc-900 dark:text-white leading-tight">
                     {name}
                   </h1>
-                  <RiCheckboxCircleFill className="size-6 text-emerald-500 shrink-0" />
+                  <CheckCircle className="size-6 text-emerald-500 shrink-0" />
                 </div>
                 <p className="text-sm md:text-base font-semibold text-zinc-500 dark:text-zinc-400">
                   {title}
@@ -108,7 +108,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
               <CardContent className="p-0 flex flex-col items-center justify-center space-y-1">
                 <span className="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white">{rating}</span>
                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1 w-full">
-                  <RiStarFill className="size-3.5 text-amber-500 shrink-0" />
+                  <Star className="size-3.5 text-amber-500 shrink-0" />
                   Rating
                 </span>
               </CardContent>
@@ -118,9 +118,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
               <CardContent className="p-0 flex flex-col items-center justify-center space-y-1">
                 <span className="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white">{totalHours}</span>
                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1 w-full">
-                  <svg className="size-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <Clock className="size-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" />
                   Hours
                 </span>
               </CardContent>
@@ -130,9 +128,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
               <CardContent className="p-0 flex flex-col items-center justify-center space-y-1">
                 <span className="text-xl md:text-2xl font-extrabold text-zinc-900 dark:text-white">{totalStudents}</span>
                 <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1 w-full">
-                  <svg className="size-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
+                  <Users className="size-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" />
                   Students
                 </span>
               </CardContent>
@@ -169,7 +165,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
                     {/* Stars */}
                     <div className="flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <RiStarFill
+                        <Star
                           key={i}
                           className={`size-3.5 ${i < review.rating ? "text-amber-500" : "text-zinc-200 dark:text-zinc-800"}`}
                         />
