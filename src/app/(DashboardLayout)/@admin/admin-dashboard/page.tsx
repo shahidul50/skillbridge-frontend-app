@@ -1,29 +1,23 @@
-import { RevenueChart } from '@/components/layout/dashboard/revenue-chart'
-import { StatCard } from '@/components/layout/dashboard/stat-card'
-import { TransactionTable } from '@/components/layout/dashboard/transaction-table'
-import { DollarSign, TicketPercent, TrendingUp, WalletCards } from "lucide-react";
+import { getDashboardStatsAction } from "@/actions/admin.action";
+import DashboardModule from "@/components/modules/dashboard/admin/DashboardModule";
 
-function AdminDashbard() {
+const AdminDashboardPage = async () => {
+  const { data, error } = await getDashboardStatsAction();
+
+  if (error || !data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <h2 className="text-xl font-semibold text-red-500">Error loading dashboard</h2>
+        <p className="text-zinc-500">{error || "Something went wrong"}</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-    {/* KPI Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard  title="Gross Revenue" value="$487,500" change="+14.2%" icon={DollarSign} />
-        <StatCard title="Net Profit" value="$213,100" change="+28.7%" icon={TrendingUp} />
-        <StatCard title="Refund Rate" value="3.1%" change="+26.2%" icon={TicketPercent} />
-        <StatCard title="Avg Transaction" value="$74.20" change="+8.5%" icon={WalletCards} />
-      </div>
+    <div className="container mx-auto">
+      <DashboardModule stats={data} />
+    </div>
+  );
+};
 
-      {/* Main Charts */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <RevenueChart  />
-        {/* আপনি চাইলে এখানে CostsChart ও যোগ করতে পারেন */}
-      </div>
-
-      {/* Recent Transactions */}
-      <TransactionTable />
-      </>
-  )
-}
-
-export default AdminDashbard
+export default AdminDashboardPage;

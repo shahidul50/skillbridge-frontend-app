@@ -1,5 +1,5 @@
 import { Route } from "@/types";
-import { LayoutDashboard, CopyPlus, Users, ShieldUser } from "lucide-react";
+import { LayoutDashboard, CopyPlus, Users, CreditCard, SquarePlus, CalendarCheck } from "lucide-react";
 export const adminRoutes: Route[] = [
     {
         title: "Overview",
@@ -19,15 +19,40 @@ export const adminRoutes: Route[] = [
                 url: "/admin-dashboard/users",
                 icon: Users
             },
-            {
-                name: "Tutors",
-                url: "/admin-dashboard/tutors",
-                icon: ShieldUser
-            },
+        ],
+    },
+    {
+        title: "Content Management",
+        items: [
             {
                 name: "Add Category",
                 url: "/admin-dashboard/add-category",
                 icon: CopyPlus
+            },
+        ],
+    },
+    {
+        title: "Core Operations",
+        items: [
+            {
+                name: "Bookings",
+                url: "/admin-dashboard/bookings",
+                icon: CalendarCheck
+            },
+        ],
+    },
+    {
+        title: "Financials",
+        items: [
+            {
+                name: "Payments",
+                url: "/admin-dashboard/payments",
+                icon: CreditCard
+            },
+            {
+                name: "Add Payment Account",
+                url: "/admin-dashboard/add-payment-account",
+                icon: SquarePlus
             },
         ],
     },
