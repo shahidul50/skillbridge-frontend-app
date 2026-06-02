@@ -213,3 +213,44 @@ export type TPaymentStatsResponse = {
 
 
 export type TPaymentVerifyStatus = "SUCCESS" | "FAILED";
+
+
+export type TPaymentAccount = {
+    id: string;
+    method: string;
+    accountNumber: string;
+    accountType: string;
+    isActive: boolean;
+}
+
+export type TPaymentAccountResponse = {
+    data: TPaymentAccount[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    }
+}
+
+export type TPaymentAccountParams = {
+    limit?: number;
+    page?: number;
+    searchTerm?: string;
+    isActive?: boolean;
+}
+
+
+export type TCreatePaymentAccount = {
+    method: "BKASH" | "NAGAD" | "ROCKET";
+    accountNumber: string;
+    accountType: "PERSONAL" | "MERCHANT";
+}
+
+export type TUpdatePaymentAccount = {
+    method: "BKASH" | "NAGAD" | "ROCKET";
+    accountNumber: string;
+    accountType: "PERSONAL" | "MERCHANT";
+    isActive: boolean;
+}
+

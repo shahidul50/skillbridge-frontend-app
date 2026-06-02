@@ -1,7 +1,7 @@
 
 
 const AdminDefault = () => {
-  return null
+  return <></>
 }
 
 export default AdminDefault

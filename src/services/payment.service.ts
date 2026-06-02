@@ -1,10 +1,15 @@
 import { env } from "@/env";
 import { ServiceOptions } from "@/types";
 import {
+  TPaymentAccount,
+  TPaymentAccountParams,
+  TPaymentAccountResponse,
   TPaymentParams,
   TPaymentResponse,
   TPaymentStatsResponse,
   TPaymentVerifyStatus,
+  TCreatePaymentAccount,
+  TUpdatePaymentAccount,
 } from "@/types/admin.type";
 import { cookies } from "next/headers";
 
@@ -133,6 +138,159 @@ export const paymentService = {
       console.error(err);
       return {
         error: "Some error occurred while verifying payment",
+        data: null,
+      };
+    }
+  },
+
+  getAllPaymentAccountForAdminDashboard: async (
+    params?: TPaymentAccountParams,
+    options?: ServiceOptions
+  ) => {
+    try {
+      const cookieStore = await cookies();
+      const url = new URL(`${API_URL}/payments/admin/accounts`);
+
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.append(key, value.toString());
+          }
+        });
+      }
+
+      const config: RequestInit = {
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+      };
+
+      if (options?.cache) {
+        config.cache = options.cache;
+      } else {
+        config.cache = "no-store";
+      }
+
+      const res = await fetch(url.toString(), config);
+      const result = await res.json();
+
+      if (!res.ok) {
+        return {
+          error: result?.message || "Failed to fetch payment accounts",
+          data: null,
+        };
+      }
+
+      return {
+        error: null,
+        data: result?.data as TPaymentAccountResponse,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        error: "Some error occurred while fetching payment accounts",
+        data: null,
+      };
+    }
+  },
+
+  getPaymentAccountDetailsByIdForAdminDashboard: async (id: string) => {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${API_URL}/payments/admin/${id}`, {
+        headers: {
+          Cookie: cookieStore.toString(),
+        },
+        cache: "no-store",
+      });
+      const result = await res.json();
+
+      if (!res.ok) {
+        return {
+          error: result?.message || "Failed to fetch payment account details",
+          data: null,
+        };
+      }
+
+      return {
+        error: null,
+        data: result?.data as TPaymentAccount,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        error: "Some error occurred while fetching payment account details",
+        data: null,
+      };
+    }
+  },
+
+  createPaymentAccountForAdminDashboard: async (
+    data: TCreatePaymentAccount
+  ) => {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${API_URL}/payments/admin/account`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+
+      if (!res.ok) {
+        return {
+          error: result?.message || "Failed to create payment account",
+          data: null,
+        };
+      }
+
+      return {
+        error: null,
+        data: result?.data as TPaymentAccount,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        error: "Some error occurred while creating payment account",
+        data: null,
+      };
+    }
+  },
+
+  updatePaymentAccountForAdminDashboard: async (
+    id: string,
+    data: TUpdatePaymentAccount
+  ) => {
+    try {
+      const cookieStore = await cookies();
+      const res = await fetch(`${API_URL}/payments/admin/account/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+
+      if (!res.ok) {
+        return {
+          error: result?.message || "Failed to update payment account",
+          data: null,
+        };
+      }
+
+      return {
+        error: null,
+        data: result?.data as TPaymentAccount,
+      };
+    } catch (err) {
+      console.error(err);
+      return {
+        error: "Some error occurred while updating payment account",
         data: null,
       };
     }

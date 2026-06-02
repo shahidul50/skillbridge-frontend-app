@@ -1,5 +1,5 @@
 const studentDefault = () => {
-  return null
+  return <></>
 }
 
 export default studentDefault
