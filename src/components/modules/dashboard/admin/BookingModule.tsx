@@ -349,57 +349,59 @@ export default function BookingModule({ bookings, stats }: BookingModuleProps) {
             </div>
           </div>
 
-          <Pagination className="w-auto mx-0">
-            <PaginationContent>
-              <PaginationItem>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-              </PaginationItem>
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter(page => page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1))
-                .map((page, index, array) => {
-                  const prevPage = array[index - 1];
-                  const showEllipsis = prevPage && page - prevPage > 1;
+          {totalPages > 1 && (
+            <Pagination className="w-auto mx-0">
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(page => page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1))
+                  .map((page, index, array) => {
+                    const prevPage = array[index - 1];
+                    const showEllipsis = prevPage && page - prevPage > 1;
 
-                  return (
-                    <div key={page} className="flex items-center">
-                      {showEllipsis && <span className="text-muted-foreground px-1">...</span>}
-                      <PaginationItem>
-                        <PaginationLink
-                          isActive={currentPage === page}
-                          onClick={() => handlePageChange(page)}
-                          className={`h-8 w-8 text-xs cursor-pointer ${
-                            currentPage === page
-                              ? "bg-emerald-700 text-white hover:bg-emerald-800 hover:text-white"
-                              : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                          }`}
-                        >
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    </div>
-                  );
-                })}
-              <PaginationItem>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+                    return (
+                      <div key={page} className="flex items-center">
+                        {showEllipsis && <span className="text-muted-foreground px-1">...</span>}
+                        <PaginationItem>
+                          <PaginationLink
+                            isActive={currentPage === page}
+                            onClick={() => handlePageChange(page)}
+                            className={`h-8 w-8 text-xs cursor-pointer ${
+                              currentPage === page
+                                ? "bg-emerald-700 text-white hover:bg-emerald-800 hover:text-white"
+                                : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            }`}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      </div>
+                    );
+                  })}
+                <PaginationItem>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </Card>
 

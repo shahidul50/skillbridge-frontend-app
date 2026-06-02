@@ -110,6 +110,7 @@ export enum UserRole {
     ADMIN = "ADMIN",
 }
 
+// booking types
 
 export type TBooking = {
     bookingId: string;
@@ -169,3 +170,46 @@ export type TBookingReciptResponse = {
 }
 
 
+//payments types
+
+export type TPayment = {
+    paymentId: string;
+    transactionId: string;
+    studentName: string;
+    tutorName: string;
+    tutorCategoryName: string[];
+    paymentSummitedDate: string;
+    amount: number;
+    status: string;
+}
+
+export type TPaymentResponse = {
+    data: TPayment[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    }
+}
+
+export interface TPaymentParams {
+    limit?: number;
+    page?: number;
+    searchTerm?: string;
+    status?: "SUCCESS" | "PENDING" | "FAILED";
+}
+
+export type TPaymentStatsResponse = {
+    totalEarning: number;
+    earningGrowthMetric: number;
+    totalPendingPayments: number;
+    pendingPaymentGrowthMetric: number;
+    totalSuccessfulPayments: number;
+    successfulPaymentGrowthMetric: number;
+    totalFailedPayments: number;
+    failedPaymentGrowthMetric: number;
+}
+
+
+export type TPaymentVerifyStatus = "SUCCESS" | "FAILED";
