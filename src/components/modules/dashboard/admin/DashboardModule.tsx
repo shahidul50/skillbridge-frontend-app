@@ -41,7 +41,7 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
       icon: GraduationCap,
       color: "text-emerald-500",
       bgColor: "bg-emerald-50 dark:bg-emerald-500/10",
-      link: "/admin-dashboard/users?role=tutor",
+      link: "/admin-dashboard/users?role=TUTOR",
     },
     {
       title: "TOTAL STUDENTS",
@@ -49,7 +49,7 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
       icon: UserRound,
       color: "text-emerald-500",
       bgColor: "bg-emerald-50 dark:bg-emerald-500/10",
-      link: "/admin-dashboard/users?role=student",
+      link: "/admin-dashboard/users?role=STUDENT",
     },
     {
       title: "BANNED USERS",
@@ -57,7 +57,7 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
       icon: Ban,
       color: "text-red-500",
       bgColor: "bg-red-50 dark:bg-red-500/10",
-      link: "/admin-dashboard/users?status=banned",
+      link: "/admin-dashboard/users?isActive=false",
     },
   ];
 
@@ -158,23 +158,23 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">
-                          <AvatarImage src={booking.TutorImage} alt={booking.TutorName} />
+                          <AvatarImage src={booking.tutorImage} alt={booking.tutorName} />
                           <AvatarFallback className="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                            {booking.TutorName.charAt(0)}
+                            {booking.tutorName.charAt(0)}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
                           <span className="font-bold text-zinc-900 dark:text-zinc-100">
-                            {booking.TutorName}
+                            {booking.tutorName}
                           </span>
                           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                            {booking.TutorEmail}
+                            {booking.tutorEmail}
                           </span>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="text-zinc-600 dark:text-zinc-400 italic">
-                      {booking.TutorCategories.join(", ")}
+                      {booking.tutorCategories.join(", ")}
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex flex-col text-sm">
@@ -187,22 +187,22 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
                       </div>
                     </TableCell>
                     <TableCell className="text-right font-bold text-zinc-900 dark:text-zinc-100">
-                      TK {booking.Price}
+                      TK {booking.price}
                     </TableCell>
                     <TableCell className="text-right">
                       <Badge
                         variant="secondary"
                         className={`font-semibold uppercase text-[10px] tracking-tight ${
-                          booking.Status === "CONFIRMED"
+                          booking.status === "CONFIRMED"
                             ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                            : booking.Status === "PENDING"
+                            : booking.status === "PENDING"
                             ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
-                            : booking.Status === "COMPLETED"
+                            : booking.status === "COMPLETED"
                             ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
                             : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
                         }`}
                       >
-                        {booking.Status}
+                        {booking.status}
                       </Badge>
                     </TableCell>
                   </TableRow>
@@ -258,26 +258,26 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
                       {payment.transactionId}
                     </TableCell>
                     <TableCell className="font-bold text-zinc-900 dark:text-zinc-100">
-                      {payment.StudentName}
+                      {payment.studentName}
                     </TableCell>
                     <TableCell className="text-right font-bold text-zinc-900 dark:text-zinc-100 uppercase">
-                      TK {payment.Amount}
+                      TK {payment.amount}
                     </TableCell>
                     <TableCell className="text-center text-zinc-600 dark:text-zinc-400">
-                      {payment.Date}
+                      {payment.date}
                     </TableCell>
                     <TableCell className="text-right">
                       <Badge
                         variant="secondary"
                         className={`font-semibold uppercase text-[10px] tracking-tight ${
-                          payment.Status === "SUCCESS"
+                          payment.status === "SUCCESS"
                             ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                            : payment.Status === "PENDING"
+                            : payment.status === "PENDING"
                             ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
                             : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
                         }`}
                       >
-                        {payment.Status}
+                        {payment.status}
                       </Badge>
                     </TableCell>
                   </TableRow>
