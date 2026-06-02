@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Container } from "@/components/layout/Container";
 import { getPaymentAccountDetails } from "@/actions/payment.action";
-import { createBooking } from "@/actions/booking.action";
+import { createBookingAction } from "@/actions/booking.action";
 import {
     Field,
     FieldError,
@@ -195,7 +195,7 @@ export default function BookingModule({ tutor, user }: BookingModuleProps) {
           transactionId: value.transactionId,
         };
 
-        const res = await createBooking(bookingData);
+        const res = await createBookingAction(bookingData);
 
         if (res?.success) {
           // Handle potential nested data structure

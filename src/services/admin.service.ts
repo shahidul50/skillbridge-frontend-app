@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { TAdminStats, TStudentProfile, TTutorProfile, TUserParams, TUserResponse } from "@/types/admin.type";
+import { TAdminStatsResponse, TStudentProfileResponse, TTutorProfileResponse, TUserParams, TUserResponse } from "@/types/admin.type";
 import { ServiceOptions } from "@/types";
 import { cookies } from "next/headers";
 
@@ -22,7 +22,7 @@ export const adminService = {
         return { error: result?.message || "Failed to fetch dashboard stats", data: null };
       }
 
-      return { error: null, data: result?.data as TAdminStats };
+      return { error: null, data: result?.data as TAdminStatsResponse };
     } catch (err) {
       console.error(err);
       return { error: "Some error occurred while fetching dashboard stats", data: null };
@@ -108,7 +108,7 @@ export const adminService = {
         return { error: result?.message || "Failed to fetch user profile", data: null };
       }
 
-      return { error: null, data: result?.data as TTutorProfile | TStudentProfile };
+      return { error: null, data: result?.data as TTutorProfileResponse | TStudentProfileResponse };
     } catch (err) {
       console.error(err);
       return { error: "Some error occurred while fetching user profile", data: null };

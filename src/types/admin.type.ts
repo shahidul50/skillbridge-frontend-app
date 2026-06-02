@@ -21,7 +21,7 @@ export type TRecentPayment = {
     status: "SUCCESS" | "PENDING" | "FAILED";
 };
 
-export type TAdminStats = {
+export type TAdminStatsResponse = {
     totalUsers: number;
     totalTutors: number;
     totalStudents: number;
@@ -58,7 +58,7 @@ export type TUserResponse = {
     }
 }
 
-export type TTutorProfile = {
+export type TTutorProfileResponse = {
     tutorName: string;
     tutorEmail: string;
     tutorImage: string;
@@ -91,7 +91,7 @@ export type TStudentRecentPayment = {
     status: string;
 }
 
-export type TStudentProfile = {
+export type TStudentProfileResponse = {
     studentName: string;
     studentEmail: string;
     studentImage: string;
@@ -109,4 +109,63 @@ export enum UserRole {
     STUDENT = "STUDENT",
     ADMIN = "ADMIN",
 }
+
+
+export type TBooking = {
+    bookingId: string;
+    studentName: string;
+    studentEmail: string;
+    tutorName: string;
+    tutorEmail: string;
+    tutorCategoryName: string[];
+    availabilitySlotDate: string;
+    availabilitySlotStartTime: string;
+    availabilitySlotEndTime: string;
+    amount: number;
+    bookingStatus: string;
+}
+
+export type TBookingResponse = {
+    data: TBooking[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    }
+}
+
+export interface TBookingParams {
+    limit?: number;
+    page?: number;
+    searchTerm?: string;
+    bookingStatus?: string;
+}
+
+export type TBookingStatsResponse = {
+    totalBookings: number;
+    bookingGrowthMetric: number;
+    pendingBooking: number;
+    totalCompletedSession: number;
+    sessionSuccessRate: number;
+    uncompletedBooking: number;
+}
+
+export type TBookingReciptResponse = {
+    invoiceId: string;
+    bookingId: string;
+    studentName: string;
+    studentEmail: string;
+    tutorName: string;
+    tutorEmail: string;
+    tutorCategoryName: string;
+    bookingStatus: string;
+    availabilitySlotDate: string;
+    availabilitySlotStartTime: string;
+    availabilitySlotEndTime: string;
+    paidAmount: number;
+    paymentMethod: string;
+    transactionId: string;
+}
+
 
