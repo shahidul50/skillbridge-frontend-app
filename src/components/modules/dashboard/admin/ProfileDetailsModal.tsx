@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { TStudentProfile, TTutorProfile, UserRole } from "@/types/admin.type";
+import { TStudentProfileResponse, TTutorProfileResponse, UserRole } from "@/types/admin.type";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TutorLayout } from "./TutorLayout";
 import { StudentLayout } from "./StudentLayout";
@@ -15,7 +15,7 @@ import { StudentLayout } from "./StudentLayout";
 interface ProfileDetailsModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  data: TTutorProfile | TStudentProfile | null;
+  data: TTutorProfileResponse | TStudentProfileResponse | null;
 }
 
 export default function ProfileDetailsModal({
@@ -40,9 +40,9 @@ export default function ProfileDetailsModal({
         <ScrollArea className="flex-1 w-full min-h-0">
           <div className="py-2 pb-6 px-4 sm:px-6">
             {isTutor ? (
-              <TutorLayout data={data as TTutorProfile} />
+              <TutorLayout data={data as TTutorProfileResponse} />
             ) : (
-              <StudentLayout data={data as TStudentProfile} />
+              <StudentLayout data={data as TStudentProfileResponse} />
             )}
           </div>
         </ScrollArea>

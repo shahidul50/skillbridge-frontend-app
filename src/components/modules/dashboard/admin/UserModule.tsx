@@ -35,7 +35,7 @@ import { bannedUserAccountAction, getUserProfileDetailsByUserIdAction } from "@/
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ProfileDetailsModal from "./ProfileDetailsModal";
-import { TStudentProfile, TTutorProfile } from "@/types/admin.type";
+import { TStudentProfileResponse, TTutorProfileResponse } from "@/types/admin.type";
 
 interface UserModuleProps {
   initialData: TUser[] | any;
@@ -53,7 +53,7 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeProfile, setActiveProfile] = useState<TTutorProfile | TStudentProfile | null>(null);
+  const [activeProfile, setActiveProfile] = useState<TTutorProfileResponse | TStudentProfileResponse | null>(null);
   const [isFetchingProfile, setIsFetchingProfile] = useState(false);
 
   // Local state for instant UI feedback on search

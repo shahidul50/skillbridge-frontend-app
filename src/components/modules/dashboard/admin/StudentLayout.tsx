@@ -9,10 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TStudentProfile } from "@/types/admin.type";
+import { TStudentProfileResponse } from "@/types/admin.type";
 import { InfoItem } from "./InfoItem";
 
-export function StudentLayout({ data }: { data: TStudentProfile }) {
+export function StudentLayout({ data }: { data: TStudentProfileResponse }) {
   return (
     <div className="space-y-4 w-full min-w-0">
       <div className="flex flex-col items-center mb-4">

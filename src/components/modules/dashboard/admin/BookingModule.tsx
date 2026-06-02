@@ -39,7 +39,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  TBooking,
   TBookingParams,
   TBookingResponse,
   TBookingStatsResponse,

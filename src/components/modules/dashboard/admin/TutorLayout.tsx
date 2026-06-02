@@ -1,10 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { TTutorProfile } from "@/types/admin.type";
+import { TTutorProfileResponse } from "@/types/admin.type";
 import { Star } from "lucide-react";
 import { InfoItem } from "./InfoItem";
 
-export function TutorLayout({ data }: { data: TTutorProfile }) {
+export function TutorLayout({ data }: { data: TTutorProfileResponse }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center mb-4">

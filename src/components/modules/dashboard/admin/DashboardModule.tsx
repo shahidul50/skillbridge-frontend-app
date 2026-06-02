@@ -19,10 +19,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
-import { TAdminStats } from "@/types/admin.type";
+import { TAdminStatsResponse } from "@/types/admin.type";
 
 interface DashboardModuleProps {
-  stats: TAdminStats;
+  stats: TAdminStatsResponse;
 }
 
 const DashboardModule = ({ stats }: DashboardModuleProps) => {
@@ -91,7 +91,7 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> 
 
       {/* Recent Bookings */}
       <Card className="border-none shadow-sm dark:bg-zinc-900/50">

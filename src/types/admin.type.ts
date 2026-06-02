@@ -112,7 +112,7 @@ export enum UserRole {
 
 // booking types
 
-export type TBooking = {
+export type TAdminBooking = {
     bookingId: string;
     studentName: string;
     studentEmail: string;
@@ -127,7 +127,7 @@ export type TBooking = {
 }
 
 export type TBookingResponse = {
-    data: TBooking[];
+    data: TAdminBooking[];
     pagination: {
         total: number;
         page: number;
