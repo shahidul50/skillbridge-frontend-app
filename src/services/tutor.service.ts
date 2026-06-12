@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot, TDashboardMetaResponse, TDashboardRevenueTrendParams, TDashboardRevenueTrendResponse } from "@/types";
+import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot, TDashboardMetaResponse, TDashboardRevenueTrendParams, TDashboardRevenueTrendResponse, TBookingHistoryParams, TBookingHistoryResponse, TUpdateMeetingLinkOrStatusBodyData, TBookingDetailsResponse } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -355,7 +355,6 @@ export const tutorService = {
         }
     },
 
-
     getDashboardMeta: async (options?: ServiceOptions): Promise<{ error: string | null; data: TDashboardMetaResponse | null }> => {
         try {
             const cookieStore = await cookies();
@@ -429,6 +428,96 @@ export const tutorService = {
             return { error: null, data: result.data || result }
         } catch (err) {
             console.error("Fetch Tutor Dashboard Revenue Trends Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getTutorAllSession: async (params: TBookingHistoryParams, options?: ServiceOptions): Promise<{ error: string | null; data: TBookingHistoryResponse | null }> => {
+        try {
+            const cookieStore = await cookies();
+            const url = new URL(`${API_URL}/tutors/sessions`);
+
+            if (params) {
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null) {
+                        url.searchParams.append(key, value.toString());
+                    }
+                });
+            }
+
+            const config: RequestInit = {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-sessions"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor sessions", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Sessions Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    updateBookingStatus: async (bookingId: string, data: TUpdateMeetingLinkOrStatusBodyData) => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/sessions/${bookingId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString()
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to update booking status or meeting link", data: null }
+            }
+            return { error: null, data: result }
+        } catch (err) {
+            console.error("Update Booking Status or Meeting Link Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getSessionDetailsByBookingId: async (bookingId: string): Promise<{ error: string | null; data: TBookingDetailsResponse | null }> => {
+        try {
+            const cookieStore = await cookies();
+            const res = await fetch(`${API_URL}/tutors/session-details/${bookingId}`, {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+                next: {
+                    tags: ["session-details"]
+                }
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch session details", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Session Details Error:", err)
             return { error: "An unexpected error occurred", data: null }
         }
     },

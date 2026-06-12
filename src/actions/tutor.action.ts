@@ -1,8 +1,8 @@
 "use server";
 
 import { tutorService } from "@/services/tutor.service";
-import { GetTutorParams, IWeeklyAvailableSlot, TDashboardRevenueTrendParams } from "@/types";
-import { revalidatePath } from "next/cache";
+import { GetTutorParams, IWeeklyAvailableSlot, TDashboardRevenueTrendParams, TBookingHistoryParams, TUpdateMeetingLinkOrStatusBodyData } from "@/types";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function getAllTutor(params?: GetTutorParams) {
     const tutors = await tutorService.getAllTutor(params, { cache: "no-store" });
@@ -104,5 +104,26 @@ export async function getDashboardRevenueTrendsAction(params: TDashboardRevenueT
     const res = await tutorService.getDashboardRevenueTrends(params, { cache: "no-store" });
     return res;
 }
+
+export async function getTutorAllSessionAction(params: TBookingHistoryParams) {
+    const res = await tutorService.getTutorAllSession(params, { cache: "no-store" });
+    return res;
+}
+
+export async function updateBookingStatusAction(bookingId: string, data: TUpdateMeetingLinkOrStatusBodyData) {
+    const res = await tutorService.updateBookingStatus(bookingId, data);
+    if (!res.error) {
+        revalidatePath("/tutor-dashboard/booking-history");
+        revalidateTag("tutor-sessions", "max");
+        revalidateTag("tutor-dashboard-meta", "max");
+    }
+    return res;
+}
+
+export async function getSessionDetailsByBookingIdAction(bookingId: string) {
+    const res = await tutorService.getSessionDetailsByBookingId(bookingId);
+    return res;
+}
+
 
 

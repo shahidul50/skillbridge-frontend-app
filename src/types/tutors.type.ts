@@ -116,3 +116,60 @@ export type TDashboardRevenueTrendResponse = {
 export type TDashboardRevenueTrendParams = {
     trendPeriod: "one-week" | "one-month" | "three-month" | "six-month" | "this-year" | "all-time"
 }
+
+
+// booking history types
+export type TPagination = {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
+export type TBookingHistory = {
+    bookingId: string;
+    studentName: string;
+    studentImage: string;
+    categories: string[];
+    availabilitySlotDate: string;
+    availabilityStartTime: string;
+    availabilityEndTime: string;
+    status: string;
+    meetingLink: string | null;
+}
+
+export type TBookingHistoryResponse = {
+    data: TBookingHistory[];
+    pagination: TPagination;
+}
+
+export type TBookingHistoryParams = {
+    limit?: number;
+    page?: number;
+    status?: string;
+    searchTerm?: string;
+}
+
+export type TUpdateMeetingLinkOrStatusBodyData = {
+    status: "CONFIRMED" | "COMPLETED";
+    meetingLink: string;
+}
+
+
+export type TBookingDetailsResponse = {
+    bookingId: string;
+    studentName: string;
+    studentImage: string;
+    categories: string[];
+    availabilitySlotDate: string;
+    availabilityStartTime: string;
+    availabilityEndTime: string;
+    duration: number;
+    status: 'COMPLETED';
+    meetingLink: string;
+    review: {
+        rating: number;
+        comment: string;
+    } | null;
+}
+
