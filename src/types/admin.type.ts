@@ -54,7 +54,7 @@ export type TUserResponse = {
         total: number;
         page: number;
         limit: number;
-        totalPages: number;
+        totalPage: number;
     }
 }
 
@@ -132,7 +132,7 @@ export type TBookingResponse = {
         total: number;
         page: number;
         limit: number;
-        totalPages: number;
+        totalPage: number;
     }
 }
 
@@ -189,7 +189,7 @@ export type TPaymentResponse = {
         total: number;
         page: number;
         limit: number;
-        totalPages: number;
+        totalPage: number;
     }
 }
 
@@ -229,7 +229,7 @@ export type TPaymentAccountResponse = {
         total: number;
         page: number;
         limit: number;
-        totalPages: number;
+        totalPage: number;
     }
 }
 

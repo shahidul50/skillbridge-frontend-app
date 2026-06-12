@@ -1,7 +1,7 @@
 "use server";
 
 import { tutorService } from "@/services/tutor.service";
-import { GetTutorParams, IWeeklyAvailableSlot } from "@/types/tutors.type";
+import { GetTutorParams, IWeeklyAvailableSlot, TDashboardRevenueTrendParams } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export async function getAllTutor(params?: GetTutorParams) {
@@ -94,3 +94,15 @@ export async function deleteTutorException(id: string) {
     }
     return res;
 }
+
+export async function getDashboardMetaAction() {
+    const res = await tutorService.getDashboardMeta({ cache: "no-store" });
+    return res;
+}
+
+export async function getDashboardRevenueTrendsAction(params: TDashboardRevenueTrendParams) {
+    const res = await tutorService.getDashboardRevenueTrends(params, { cache: "no-store" });
+    return res;
+}
+
+

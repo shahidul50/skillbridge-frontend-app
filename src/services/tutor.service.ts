@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot } from "@/types";
+import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot, TDashboardMetaResponse, TDashboardRevenueTrendParams, TDashboardRevenueTrendResponse } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -48,7 +48,7 @@ export const tutorService = {
     updateTutor: async (formData: FormData) => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors`, {
+            const res = await fetch(`${API_URL}/tutors/profile`, {
                 method: "PUT",
                 headers: {
                     Cookie: cookieStore.toString()
@@ -152,7 +152,7 @@ export const tutorService = {
     getTutorSelectedCategories: async () => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/my-categories`, {
+            const res = await fetch(`${API_URL}/tutors/categories`, {
                 method: "GET",
                 headers: {
                     Cookie: cookieStore.toString()
@@ -220,8 +220,6 @@ export const tutorService = {
         }
     },
 
-
-
     deleteWeeklyAvailableSlot: async (slotId: string) => {
         try {
             const cookieStore = await cookies();
@@ -269,7 +267,7 @@ export const tutorService = {
     setTutorCategories: async (categoryIds: string[]) => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/add-categories`, {
+            const res = await fetch(`${API_URL}/tutors/categories`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -292,7 +290,7 @@ export const tutorService = {
     createTutorException: async (data: { date: string; reason: string }) => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/exception`, {
+            const res = await fetch(`${API_URL}/tutors/exceptions`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -315,7 +313,7 @@ export const tutorService = {
     getAllTutorException: async () => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/exception`, {
+            const res = await fetch(`${API_URL}/tutors/exceptions`, {
                 method: "GET",
                 headers: {
                     Cookie: cookieStore.toString()
@@ -339,7 +337,7 @@ export const tutorService = {
     deleteTutorException: async (id: string) => {
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${API_URL}/tutors/exception/${id}`, {
+            const res = await fetch(`${API_URL}/tutors/exceptions/${id}`, {
                 method: "DELETE",
                 headers: {
                     Cookie: cookieStore.toString()
@@ -353,6 +351,84 @@ export const tutorService = {
             return { error: null, data: result }
         } catch (err) {
             console.error("Delete Tutor Exception Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+
+    getDashboardMeta: async (options?: ServiceOptions): Promise<{ error: string | null; data: TDashboardMetaResponse | null }> => {
+        try {
+            const cookieStore = await cookies();
+
+            const config: RequestInit = {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-dashboard-meta"] };
+
+            const res = await fetch(`${API_URL}/tutors/dashboard/meta`, config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor dashboard meta", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Dashboard Meta Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getDashboardRevenueTrends: async (params: TDashboardRevenueTrendParams, options?: ServiceOptions): Promise<{ error: string | null; data: TDashboardRevenueTrendResponse | null }> => {
+        try {
+            const cookieStore = await cookies();
+            const url = new URL(`${API_URL}/tutors/dashboard/revenue-trends`);
+
+            if (params) {
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null) {
+                        url.searchParams.append(key, value.toString());
+                    }
+                });
+            }
+
+            const config: RequestInit = {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-dashboard-revenue-trends"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor dashboard revenue trends", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Dashboard Revenue Trends Error:", err)
             return { error: "An unexpected error occurred", data: null }
         }
     },

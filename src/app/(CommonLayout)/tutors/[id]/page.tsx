@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 interface ITutorDetailsPageProps {
   params: Promise<{ id: string }>;
 }
-
+ 
 async function TutorDetailsPage({ params }: ITutorDetailsPageProps) {
   const resolvedParams = await params;
   const response = await getTutorProfileByProfileId(resolvedParams.id);

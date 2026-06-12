@@ -1,5 +1,5 @@
 import { Route } from "@/types";
-import { LayoutDashboard, UserRound, Clock, CalendarX2, Album, CalendarCheck } from "lucide-react";
+import { LayoutDashboard, UserRound, Clock, CalendarX2, Album, CalendarCheck, Notebook } from "lucide-react";
 
 export const tutorRoutes: Route[] = [
     {
@@ -46,10 +46,16 @@ export const tutorRoutes: Route[] = [
         title: "Booking Management",
         items: [
             {
+                name: "My Bookings",
+                url: "/tutor-dashboard/booking-history",
+                icon: Notebook
+            },
+            {
                 name: "Schedule",
                 url: "/tutor-dashboard/schedule",
                 icon: CalendarCheck
-            }
+            },
+
         ]
     }
 ];

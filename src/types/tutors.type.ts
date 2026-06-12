@@ -64,3 +64,55 @@ export interface AvailabilitySlot {
     endTime: string;
     isActive: boolean;
 }
+
+
+//dashboard stats types
+
+type TDashboardStats = {
+    totalSessions: {
+        value: number;
+        growth: number;
+    },
+    totalEarnings: {
+        value: number;
+        growth: number;
+    },
+    avgRating: {
+        value: number;
+        status: string;
+    },
+    newBookings: {
+        value: number;
+        badge: string;
+    }
+}
+
+type TDashboardUpcomingSession = {
+    bookingId: string;
+    studentName: string;
+    categories: string[];
+    slotStartTime: string;
+    slotEndTime: string;
+    startTimeISO: string;
+    meetingLink: string | null;
+}
+
+export type TDashboardMetaResponse = {
+    tutorName: string;
+    todayUpcomingSessionsCount: number;
+    stats: TDashboardStats;
+    upcomingSessions: TDashboardUpcomingSession[];
+}
+
+export type TDashboardRevenueTrend = {
+    month: string;
+    revenue: number;
+}
+
+export type TDashboardRevenueTrendResponse = {
+    revenueTrends: TDashboardRevenueTrend[];
+}
+
+export type TDashboardRevenueTrendParams = {
+    trendPeriod: "one-week" | "one-month" | "three-month" | "six-month" | "this-year" | "all-time"
+}

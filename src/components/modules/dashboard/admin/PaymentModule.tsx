@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -83,21 +84,31 @@ const PaymentModule = ({
 
   // Handle URL updates
   const updateQueryParams = (newParams: Partial<TPaymentParams>) => {
-    const params = new URLSearchParams(urlSearchParams.toString());
-    
-    Object.entries(newParams).forEach(([key, value]) => {
-      if (value === undefined || value === "all" || value === "") {
-        params.delete(key);
-      } else {
-        params.set(key, String(value));
+    startTransition(() => {
+      const params = new URLSearchParams(urlSearchParams.toString());
+      
+      // Update parameters
+      Object.entries(newParams).forEach(([key, value]) => {
+        if (value === undefined || value === "all" || value === "") {
+          params.delete(key);
+        } else {
+          params.set(key, String(value));
+        }
+      });
+
+      // Reset to page 1 if searching, filtering, or changing limit
+      // But only if page isn't explicitly provided in newParams
+      if (
+        (newParams.searchTerm !== undefined || 
+         newParams.status !== undefined || 
+         newParams.limit !== undefined) && 
+        newParams.page === undefined
+      ) {
+        params.set("page", "1");
       }
+
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
     });
-
-    if (newParams.searchTerm !== undefined || newParams.status) {
-      params.set("page", "1");
-    }
-
-    router.push(`${pathname}?${params.toString()}`);
   };
 
   // Automated search with debounce
@@ -275,101 +286,101 @@ const PaymentModule = ({
         </CardHeader>
         
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-zinc-50/50 dark:bg-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 border-b border-zinc-100 dark:border-zinc-800">
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4 pl-6">
-                    TRANSACTION ID
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
-                    STUDENT NAME
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
-                    TUTOR NAME
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
-                    SUBJECT
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
-                    DATE
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
-                    AMOUNT
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
-                    STATUS
-                  </TableHead>
-                  <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4 text-center pr-6">
-                    ACTIONS
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payments.data.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-48 text-center text-zinc-500 animate-pulse">
-                      No transactions found
-                    </TableCell>
+            <div className={`overflow-x-auto transition-opacity duration-200 ${isPending ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-zinc-50/50 dark:bg-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 border-b border-zinc-100 dark:border-zinc-800">
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4 pl-6">
+                      TRANSACTION ID
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
+                      STUDENT NAME
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
+                      TUTOR NAME
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
+                      SUBJECT
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
+                      DATE
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
+                      AMOUNT
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4">
+                      STATUS
+                    </TableHead>
+                    <TableHead className="font-bold text-zinc-500 dark:text-zinc-400 uppercase text-[11px] tracking-wider py-4 text-center pr-6">
+                      ACTIONS
+                    </TableHead>
                   </TableRow>
-                ) : (
-                  payments.data.map((payment) => (
-                    <TableRow 
-                      key={payment.paymentId} 
-                      className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 border-zinc-100 dark:border-zinc-800 transition-colors duration-200"
-                    >
-                      <TableCell className="pl-6 font-mono text-[13px] font-bold text-emerald-600 dark:text-emerald-500">
-                        #{payment.transactionId}
-                      </TableCell>
-                      <TableCell className="font-semibold text-zinc-900 dark:text-zinc-100">
-                        {payment.studentName}
-                      </TableCell>
-                      <TableCell className="text-zinc-700 dark:text-zinc-300 capitalize">
-                        {payment.tutorName}
-                      </TableCell>
-                      <TableCell className="text-zinc-500 dark:text-zinc-400 text-sm italic">
-                        {payment.tutorCategoryName.join(", ")}
-                      </TableCell>
-                      <TableCell className="text-zinc-600 dark:text-zinc-400 text-sm">
-                        {payment.paymentSummitedDate}
-                      </TableCell>
-                      <TableCell className="font-extrabold text-zinc-900 dark:text-emerald-100">
-                        Tk {payment.amount.toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                           <div className={`w-2 h-2 rounded-full ${
-                             payment.status === "SUCCESS" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" :
-                             payment.status === "PENDING" ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" :
-                             "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
-                           }`} />
-                           <span className={`text-xs font-bold ${
-                             payment.status === "SUCCESS" ? "text-emerald-600 dark:text-emerald-400" :
-                             payment.status === "PENDING" ? "text-amber-600 dark:text-amber-400" :
-                             "text-red-600 dark:text-red-400"
-                           }`}>
-                             {payment.status}
-                           </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center pr-6">
-                        <Button 
-                          variant="ghost" 
-                          className="h-8 w-8 p-0 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-full transition-colors group/edit"
-                          onClick={() => {
-                            setSelectedPayment(payment);
-                            setIsVerifyModalOpen(true);
-                          }}
-                        >
-                          <Pencil className="h-4 w-4 text-zinc-400 group-hover/edit:text-emerald-600 transition-colors" />
-                        </Button>
+                </TableHeader>
+                <TableBody>
+                  {payments.data.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={8} className="h-48 text-center text-zinc-500">
+                        {isPending ? "Refreshing..." : "No transactions found"}
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  ) : (
+                    payments.data.map((payment) => (
+                      <TableRow 
+                        key={payment.paymentId} 
+                        className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 border-zinc-100 dark:border-zinc-800 transition-colors duration-200"
+                      >
+                        <TableCell className="pl-6 font-mono text-[13px] font-bold text-emerald-600 dark:text-emerald-500">
+                          #{payment.transactionId}
+                        </TableCell>
+                        <TableCell className="font-semibold text-zinc-900 dark:text-zinc-100">
+                          {payment.studentName}
+                        </TableCell>
+                        <TableCell className="text-zinc-700 dark:text-zinc-300 capitalize">
+                          {payment.tutorName}
+                        </TableCell>
+                        <TableCell className="text-zinc-500 dark:text-zinc-400 text-sm italic">
+                          {payment.tutorCategoryName.join(", ")}
+                        </TableCell>
+                        <TableCell className="text-zinc-600 dark:text-zinc-400 text-sm">
+                          {payment.paymentSummitedDate}
+                        </TableCell>
+                        <TableCell className="font-extrabold text-zinc-900 dark:text-emerald-100">
+                          Tk {payment.amount.toLocaleString()}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                             <div className={`w-2 h-2 rounded-full ${
+                               payment.status === "SUCCESS" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" :
+                               payment.status === "PENDING" ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" :
+                               "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+                             }`} />
+                             <span className={`text-xs font-bold ${
+                               payment.status === "SUCCESS" ? "text-emerald-600 dark:text-emerald-400" :
+                               payment.status === "PENDING" ? "text-amber-600 dark:text-amber-400" :
+                               "text-red-600 dark:text-red-400"
+                             }`}>
+                               {payment.status}
+                             </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center pr-6">
+                          <Button 
+                            variant="ghost" 
+                            className="h-8 w-8 p-0 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-full transition-colors group/edit"
+                            onClick={() => {
+                              setSelectedPayment(payment);
+                              setIsVerifyModalOpen(true);
+                            }}
+                          >
+                            <Pencil className="h-4 w-4 text-zinc-400 group-hover/edit:text-emerald-600 transition-colors" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           
           {/* Footer & Pagination */}
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6 px-6 py-6 border-t border-zinc-100 dark:border-zinc-800">
@@ -403,43 +414,93 @@ const PaymentModule = ({
             </div>
             
             {/* Right side: Pagination Controls */}
-            {payments.pagination.totalPages > 1 && (
-              <div className="w-full lg:w-auto flex justify-center lg:justify-end">
-                <Pagination>
-                  <PaginationContent className="gap-1">
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        className={`cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg h-9 px-3 ${payments.pagination.page === 1 ? 'opacity-50 pointer-events-none' : ''}`}
-                        onClick={() => handlePageChange(payments.pagination.page - 1)}
-                      />
-                    </PaginationItem>
-                    
-                    {[...Array(payments.pagination.totalPages)].map((_, i) => (
-                      <PaginationItem key={i}>
-                        <PaginationLink
-                          isActive={payments.pagination.page === i + 1}
-                          className={`cursor-pointer rounded-lg font-bold transition-all duration-200 h-9 w-9 flex items-center justify-center ${
-                            payments.pagination.page === i + 1 
-                            ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-md border-none' 
-                            : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
-                          }`}
-                          onClick={() => handlePageChange(i + 1)}
-                        >
-                          {i + 1}
-                        </PaginationLink>
+            {(() => {
+              const totalItems = Number(payments.pagination.total) || 0;
+              const currentLimit = Number(payments.pagination.limit) || 10;
+              // Use totalPage from backend, fallback to manual calculation
+              const totalPages = Number(payments.pagination.totalPage) || Math.ceil(totalItems / currentLimit) || 1;
+              const currentPage = Number(payments.pagination.page) || 1;
+
+              if (totalPages <= 1) return null;
+
+              return (
+                <div className="w-full lg:w-auto flex justify-center lg:justify-end">
+                  <Pagination className="mx-0 w-auto">
+                    <PaginationContent className="gap-1">
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          href="#"
+                          className={`cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg h-9 px-3 ${currentPage <= 1 ? 'opacity-50 pointer-events-none' : ''}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(currentPage - 1);
+                          }}
+                        />
                       </PaginationItem>
-                    ))}
-                    
-                    <PaginationItem>
-                      <PaginationNext 
-                        className={`cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg h-9 px-3 ${payments.pagination.page === payments.pagination.totalPages ? 'opacity-50 pointer-events-none' : ''}`}
-                        onClick={() => handlePageChange(payments.pagination.page + 1)}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            )}
+                      
+                      {(() => {
+                        const items = [];
+                        
+                        if (totalPages <= 7) {
+                          for (let i = 1; i <= totalPages; i++) items.push(i);
+                        } else {
+                          items.push(1);
+                          if (currentPage > 3) items.push("ellipsis1");
+                          
+                          const start = Math.max(2, currentPage - 1);
+                          const end = Math.min(totalPages - 1, currentPage + 1);
+                          
+                          for (let i = start; i <= end; i++) items.push(i);
+                          
+                          if (currentPage < totalPages - 2) items.push("ellipsis2");
+                          items.push(totalPages);
+                        }
+                        
+                        return items.map((item, idx) => {
+                          if (typeof item === 'string') {
+                            return (
+                              <PaginationItem key={`ellipsis-${idx}`}>
+                                <PaginationEllipsis />
+                              </PaginationItem>
+                            );
+                          }
+                          return (
+                            <PaginationItem key={item}>
+                              <PaginationLink
+                                href="#"
+                                isActive={currentPage === item}
+                                className={`cursor-pointer rounded-lg font-bold transition-all duration-200 h-9 w-9 flex items-center justify-center ${
+                                  currentPage === item 
+                                  ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-md border-none' 
+                                  : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+                                }`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handlePageChange(item);
+                                }}
+                              >
+                                {item}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        });
+                      })()}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          href="#"
+                          className={`cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg h-9 px-3 ${currentPage >= totalPages ? 'opacity-50 pointer-events-none' : ''}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(currentPage + 1);
+                          }}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              );
+            })()}
           </div>
         </CardContent>
       </Card>
