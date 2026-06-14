@@ -127,3 +127,371 @@
     @apply font-sans;
     }
 }
+
+/* ============================================
+   FullCalendar Custom Theme - Emerald Design
+   ============================================ */
+
+.fc-custom-theme {
+  --fc-border-color: oklch(0.925 0.005 214.3);
+  --fc-today-bg-color: oklch(0.871 0.15 154.449 / 8%);
+  --fc-now-indicator-color: #10b981;
+  --fc-event-bg-color: #10b981;
+  --fc-event-border-color: #059669;
+  --fc-event-text-color: #ffffff;
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: oklch(0.963 0.002 197.1 / 50%);
+}
+
+.dark .fc-custom-theme {
+  --fc-border-color: oklch(1 0 0 / 8%);
+  --fc-today-bg-color: oklch(0.448 0.119 151.328 / 8%);
+  --fc-neutral-bg-color: oklch(0.275 0.011 216.9 / 30%);
+}
+
+/* Table & Cell Borders */
+.fc-custom-theme .fc-scrollgrid {
+  border: none !important;
+}
+
+.fc-custom-theme .fc-scrollgrid td,
+.fc-custom-theme .fc-scrollgrid th {
+  border-color: var(--fc-border-color) !important;
+}
+
+.fc-custom-theme .fc-scrollgrid-section > * {
+  border-color: var(--fc-border-color) !important;
+}
+
+/* Column Headers */
+.fc-custom-theme .fc-col-header-cell {
+  padding: 12px 8px !important;
+  background: oklch(0.871 0.15 154.449 / 5%);
+  border-bottom: 2px solid var(--fc-border-color) !important;
+}
+
+.dark .fc-custom-theme .fc-col-header-cell {
+  background: oklch(0.448 0.119 151.328 / 5%);
+}
+
+.fc-custom-theme .fc-col-header-cell-cushion {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: oklch(0.56 0.021 213.5) !important;
+  padding: 4px 0 !important;
+  text-decoration: none !important;
+}
+
+/* Today's column header */
+.fc-custom-theme .fc-day-today .fc-col-header-cell-cushion {
+  color: #10b981 !important;
+}
+
+/* Slot Labels (Time axis) */
+.fc-custom-theme .fc-timegrid-slot-label-cushion {
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: oklch(0.56 0.021 213.5 / 50%) !important;
+  padding: 2px 12px !important;
+}
+
+.fc-custom-theme .fc-timegrid-slot {
+  height: 48px !important;
+}
+
+.fc-custom-theme .fc-timegrid-slot-label {
+  border-right: 1px solid var(--fc-border-color) !important;
+  background: oklch(0.963 0.002 197.1 / 30%);
+}
+
+.dark .fc-custom-theme .fc-timegrid-slot-label {
+  background: oklch(0.218 0.008 223.9 / 30%);
+}
+
+/* Now Indicator */
+.fc-custom-theme .fc-timegrid-now-indicator-line {
+  border-color: #10b981 !important;
+  border-width: 2px !important;
+}
+
+.fc-custom-theme .fc-timegrid-now-indicator-arrow {
+  border-color: #10b981 !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+/* Events */
+.fc-custom-theme .fc-event {
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 1px 3px oklch(0 0 0 / 10%), 0 1px 2px oklch(0 0 0 / 6%) !important;
+  cursor: default !important;
+  overflow: hidden !important;
+  transition: box-shadow 0.2s ease, transform 0.15s ease !important;
+}
+
+.fc-custom-theme .fc-event:hover {
+  box-shadow: 0 4px 12px oklch(0.527 0.154 150.069 / 30%) !important;
+  transform: translateY(-1px) !important;
+}
+
+.fc-custom-theme .fc-event .fc-event-main {
+  padding: 0 !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Day Grid (Month view) events */
+.fc-custom-theme .fc-daygrid-event {
+  border-radius: 6px !important;
+  margin: 1px 2px !important;
+}
+
+.fc-custom-theme .fc-daygrid-dot-event {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: white !important;
+  padding: 2px 4px !important;
+  border-radius: 6px !important;
+}
+
+.fc-custom-theme .fc-daygrid-dot-event:hover {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+/* Month view day numbers */
+.fc-custom-theme .fc-daygrid-day-number {
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  padding: 8px !important;
+  color: oklch(0.56 0.021 213.5) !important;
+  text-decoration: none !important;
+}
+
+.fc-custom-theme .fc-day-today .fc-daygrid-day-number {
+  background: #10b981 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 4px !important;
+  box-shadow: 0 2px 8px oklch(0.527 0.154 150.069 / 30%) !important;
+}
+
+/* Other month days */
+.fc-custom-theme .fc-day-other .fc-daygrid-day-number {
+  opacity: 0.25 !important;
+}
+
+.fc-custom-theme .fc-day-other {
+  background: oklch(0.963 0.002 197.1 / 30%) !important;
+}
+
+.dark .fc-custom-theme .fc-day-other {
+  background: oklch(0.148 0.004 228.8 / 30%) !important;
+}
+
+/* Day cell hover */
+.fc-custom-theme .fc-daygrid-day:hover {
+  background: oklch(0.963 0.002 197.1 / 50%) !important;
+}
+
+.dark .fc-custom-theme .fc-daygrid-day:hover {
+  background: oklch(0.275 0.011 216.9 / 30%) !important;
+}
+
+/* "More" link */
+.fc-custom-theme .fc-daygrid-more-link {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  color: oklch(0.56 0.021 213.5 / 60%) !important;
+  text-decoration: none !important;
+  padding: 2px 4px !important;
+}
+
+.fc-custom-theme .fc-daygrid-more-link:hover {
+  color: #10b981 !important;
+}
+
+/* Remove outer frame borders */
+.fc-custom-theme .fc-scrollgrid-section-header > th,
+.fc-custom-theme .fc-scrollgrid-section-body > td {
+  border-right: none !important;
+}
+
+/* Popover — centered directly in the screen, with a dark backdrop */
+.fc-custom-theme .fc-popover {
+  /* Use fixed positioning to escape parent limits */
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 300px !important;
+  z-index: 99999 !important;
+
+  /* Background & styling */
+  background: white !important;
+  border-radius: 16px !important;
+  border: 1px solid oklch(0.925 0.005 214.3) !important;
+  
+  /* The first shadow creates the backdrop overlay, the second creates the popover shadow */
+  box-shadow:
+    0 0 0 9999px rgba(0, 0, 0, 0.5),
+    0 20px 40px rgba(0, 0, 0, 0.2) !important;
+  overflow: hidden !important;
+}
+
+.dark .fc-custom-theme .fc-popover {
+  background: oklch(0.218 0.008 223.9) !important;
+  border-color: oklch(1 0 0 / 10%) !important;
+  box-shadow:
+    0 0 0 9999px rgba(0, 0, 0, 0.7),
+    0 20px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.fc-custom-theme .fc-popover-header {
+  background: oklch(0.871 0.15 154.449 / 8%) !important;
+  border-bottom: 1px solid oklch(0.925 0.005 214.3) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  color: oklch(0.527 0.154 150.069) !important;
+  padding: 10px 14px !important;
+}
+
+.dark .fc-custom-theme .fc-popover-header {
+  background: oklch(0.448 0.119 151.328 / 10%) !important;
+  border-bottom-color: oklch(1 0 0 / 8%) !important;
+  color: #34d399 !important;
+}
+
+
+/* Dark mode text color */
+.dark .fc-custom-theme .fc-col-header-cell-cushion,
+.dark .fc-custom-theme .fc-timegrid-slot-label-cushion,
+.dark .fc-custom-theme .fc-daygrid-day-number {
+  color: oklch(0.723 0.014 214.4) !important;
+}
+
+.dark .fc-custom-theme .fc-day-today .fc-col-header-cell-cushion,
+.dark .fc-custom-theme .fc-day-today .fc-daygrid-day-number {
+  color: #34d399 !important;
+}
+
+.dark .fc-custom-theme .fc-day-today .fc-daygrid-day-number {
+  background: #059669 !important;
+  color: white !important;
+}
+
+/* Event dot removal in month view (we use custom content) */
+.fc-custom-theme .fc-daygrid-event-dot {
+  display: none !important;
+}
+
+/* Time text in events */
+.fc-custom-theme .fc-event-time {
+  display: none !important;
+}
+
+/* Min height for month view cells */
+.fc-custom-theme .fc-daygrid-day-frame {
+  min-height: 95px !important;
+}
+
+/* FullCalendar Premium Theme Overrides */
+.fc-custom-theme .fc {
+  --fc-border-color: oklch(from var(--muted-foreground) l c h / 0.1);
+  --fc-daygrid-event-dot-width: 8px;
+  --fc-list-event-dot-width: 10px;
+  --fc-now-indicator-color: #10b981;
+  font-family: inherit;
+}
+
+.fc-custom-theme .fc-theme-standard td, 
+.fc-custom-theme .fc-theme-standard th,
+.fc-custom-theme .fc-theme-standard .fc-scrollgrid {
+  border-color: rgba(148, 163, 184, 0.1);
+}
+
+.fc-custom-theme .fc-timegrid-slot {
+  height: 4rem !important;
+  border-bottom: 1px dashed rgba(148, 163, 184, 0.1);
+}
+
+.fc-custom-theme .fc-v-event {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.fc-custom-theme .fc-v-event:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3) !important;
+  z-index: 50;
+}
+
+.fc-custom-theme .fc-daygrid-event {
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  font-weight: 700 !important;
+}
+
+.fc-custom-theme .fc-now-indicator-arrow {
+  border-width: 6px 0 6px 7px;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: #10b981;
+}
+
+.fc-custom-theme .fc-timegrid-now-indicator-line {
+  border-color: #10b981;
+  border-width: 2px;
+}
+
+.fc-custom-theme .fc-col-header-cell {
+  padding: 1.5rem 0 !important;
+  background: oklch(from var(--muted) l c h / 0.3);
+}
+
+.fc-custom-theme .fc-col-header-cell-cushion {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl(var(--muted-foreground));
+  text-decoration: none !important;
+}
+
+.fc-custom-theme .fc-timegrid-axis-cushion {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: hsl(var(--muted-foreground));
+  text-transform: uppercase;
+}
+
+/* Custom Scrollbar for Calendar */
+.fc-custom-theme .fc-scroller::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fc-custom-theme .fc-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fc-custom-theme .fc-scroller::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+}
+
+.fc-custom-theme .fc-scroller::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}

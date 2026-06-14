@@ -38,13 +38,15 @@ import {
   Eye, 
   ExternalLink,
   Loader2,
-  X
+  X,
+  LinkIcon
 } from "lucide-react";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import BookingDetailsModal from "./BookingDetailsModal";
 import BookingUpdateModal from "./BookingUpdateModal";
+import Link from "next/link";
 
 const BookingHistoryModule = () => {
   const router = useRouter();
@@ -298,6 +300,13 @@ const BookingHistoryModule = () => {
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         <div className="flex items-center justify-end gap-1 px-1">
+                           {
+                            booking.status === "CONFIRMED" && booking.meetingLink &&  (
+                           <Button size="sm" variant="ghost" disabled className="h-7 p-0 text-emerald-500 hover:text-emerald-400 hover:bg-transparent">
+                             <LinkIcon className="w-3.5 h-3.5" />
+                           </Button>
+                         )
+                           }
                            {booking.status === "CONFIRMED" && (
                              <Button 
                                 variant="ghost" 

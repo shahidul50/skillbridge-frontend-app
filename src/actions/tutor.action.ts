@@ -1,7 +1,7 @@
 "use server";
 
 import { tutorService } from "@/services/tutor.service";
-import { GetTutorParams, IWeeklyAvailableSlot, TDashboardRevenueTrendParams, TBookingHistoryParams, TUpdateMeetingLinkOrStatusBodyData } from "@/types";
+import { GetTutorParams, IWeeklyAvailableSlot, TDashboardRevenueTrendParams, TBookingHistoryParams, TUpdateMeetingLinkOrStatusBodyData, TScheduleEventsQueryParams } from "@/types";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function getAllTutor(params?: GetTutorParams) {
@@ -122,6 +122,16 @@ export async function updateBookingStatusAction(bookingId: string, data: TUpdate
 
 export async function getSessionDetailsByBookingIdAction(bookingId: string) {
     const res = await tutorService.getSessionDetailsByBookingId(bookingId);
+    return res;
+}
+
+export async function getTutorScheduleMetaAction() {
+    const res = await tutorService.getTutorScheduleMeta({ cache: "no-store" });
+    return res;
+}
+
+export async function getTutorScheduleEventsAction(params: TScheduleEventsQueryParams) {
+    const res = await tutorService.getTutorScheduleEvents(params, { cache: "no-store" });
     return res;
 }
 

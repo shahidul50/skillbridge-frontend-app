@@ -37,8 +37,13 @@ const BookingDetailsModal = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (!isOpen) {
+      setData(null);
+      return;
+    }
+
     const fetchData = async () => {
-      if (!bookingId || !isOpen) return;
+      if (!bookingId) return;
       
       setLoading(true);
       try {
@@ -58,7 +63,7 @@ const BookingDetailsModal = ({
     };
 
     fetchData();
-  }, [bookingId, isOpen, onClose]);
+  }, [bookingId, isOpen]);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }).map((_, idx) => (
@@ -133,14 +138,11 @@ const BookingDetailsModal = ({
                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
                        <LinkIcon className="h-3 w-3" /> MEETING LINK
                     </p>
-                    <a 
-                      href={data.meetingLink || "#"} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline font-bold text-sm truncate block"
+                    <span 
+                      className="text-muted-foreground/50 font-bold text-sm truncate block cursor-not-allowed select-none"
                     >
                       {data.meetingLink?.replace(/^https?:\/\//, '') || "No link provided"}
-                    </a>
+                    </span>
                   </div>
                </div>
 

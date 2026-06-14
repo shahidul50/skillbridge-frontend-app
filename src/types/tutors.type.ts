@@ -173,3 +173,62 @@ export type TBookingDetailsResponse = {
     } | null;
 }
 
+//Schecule types
+
+type TScheduleStats = {
+    todaySessions: number;
+    upcomingSessions: number;
+    uncompletedBookings: number;
+    totalBookings: number;
+    completedBookings: {
+        count: number;
+        satisfactionRate: number;
+    }
+}
+
+type TScheduleStartingSoon = {
+    bookingId: string;
+    categoryName: string;
+    startTime: string;
+    endTime: string;
+    studentName: string;
+    studentImage: string;
+    startTimeISO: string;
+    bookingStatus: string;
+    meetingLink: string | null;
+}
+
+type TScheduleClassLinkHub = {
+    bookingId: string;
+    categoryName: string;
+    studentName: string;
+    bookingStatus: string;
+    meetingLink: string | null;
+}
+
+export type TScheduleMetaResponse = {
+    stats: TScheduleStats;
+    startingSoon: TScheduleStartingSoon[];
+    classLinkHub: TScheduleClassLinkHub[];
+}
+
+
+export type TScheduleCalendarEvent = {
+    bookingId: string;
+    categoryName: string;
+    studentName: string;
+    dateISO: string;
+    startTime: string;
+    endTime: string;
+    bookingStatus: string;
+    meetingLink: string | null;
+}
+
+export type TScheduleEventsResponse = {
+    calendarEvents: TScheduleCalendarEvent[];
+}
+
+export type TScheduleEventsQueryParams = {
+    startDate: string;
+    endDate: string;
+}

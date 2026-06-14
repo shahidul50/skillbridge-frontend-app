@@ -86,7 +86,7 @@ const BookingUpdateModal = ({
       <DialogContent className="sm:max-w-[500px] p-6 rounded-3xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold font-outfit">
-            Add Meeting Link and update Status
+            Add Meeting Link or Update Status
           </DialogTitle>
         </DialogHeader>
 

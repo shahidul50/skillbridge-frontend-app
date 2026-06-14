@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot, TDashboardMetaResponse, TDashboardRevenueTrendParams, TDashboardRevenueTrendResponse, TBookingHistoryParams, TBookingHistoryResponse, TUpdateMeetingLinkOrStatusBodyData, TBookingDetailsResponse } from "@/types";
+import { ServiceOptions, GetTutorParams, IWeeklyAvailableSlot, AvailabilitySlot, TDashboardMetaResponse, TDashboardRevenueTrendParams, TDashboardRevenueTrendResponse, TBookingHistoryParams, TBookingHistoryResponse, TUpdateMeetingLinkOrStatusBodyData, TBookingDetailsResponse, TScheduleMetaResponse, TScheduleEventsQueryParams, TScheduleEventsResponse } from "@/types";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -518,6 +518,83 @@ export const tutorService = {
             return { error: null, data: result.data || result }
         } catch (err) {
             console.error("Fetch Session Details Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getTutorScheduleMeta: async (options?: ServiceOptions): Promise<{ error: string | null; data: TScheduleMetaResponse | null }> => {
+        try {
+            const cookieStore = await cookies();
+
+            const config: RequestInit = {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-schedule-meta"] };
+
+            const res = await fetch(`${API_URL}/tutors/schedule/meta`, config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor schedule meta", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Schedule Meta Error:", err)
+            return { error: "An unexpected error occurred", data: null }
+        }
+    },
+
+    getTutorScheduleEvents: async (params: TScheduleEventsQueryParams, options?: ServiceOptions): Promise<{ error: string | null; data: TScheduleEventsResponse | null }> => {
+        try {
+            const cookieStore = await cookies();
+            const url = new URL(`${API_URL}/tutors/schedule/events`);
+
+            if (params) {
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null) {
+                        url.searchParams.append(key, value.toString());
+                    }
+                });
+            }
+
+            const config: RequestInit = {
+                method: "GET",
+                headers: {
+                    Cookie: cookieStore.toString()
+                },
+            };
+
+            if (options?.cache) {
+                config.cache = options.cache;
+            }
+
+            if (options?.revalidate) {
+                config.next = { revalidate: options.revalidate };
+            }
+
+            config.next = { ...config.next, tags: ["tutor-schedule-events"] };
+
+            const res = await fetch(url.toString(), config);
+
+            const result = await res.json();
+            if (!res.ok) {
+                return { error: result.message || "Failed to fetch tutor schedule events", data: null }
+            }
+            return { error: null, data: result.data || result }
+        } catch (err) {
+            console.error("Fetch Tutor Schedule Events Error:", err)
             return { error: "An unexpected error occurred", data: null }
         }
     },

@@ -38,11 +38,13 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
   const [trends, setTrends] = useState<TDashboardRevenueTrendResponse>(initialTrends);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Update current time every minute
+  // Update current time every second and sync immediately on mount
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
+    const updateTime = () => setCurrentTime(new Date());
+    
+    updateTime(); // Sync immediately to avoid lag from server-rendered time
+    const timer = setInterval(updateTime, 1000);
+    
     return () => clearInterval(timer);
   }, []);
 
@@ -66,7 +68,7 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
   const getSessionStatus = (isoString: string, slotEndTime: string) => {
     const startTime = parseISO(isoString);
     const endTime = getEndTime(isoString, slotEndTime);
-    const diff = differenceInMinutes(startTime, currentTime);
+    const diff = Math.ceil((startTime.getTime() - currentTime.getTime()) / 60000);
 
     if (currentTime > endTime) {
       return { 
@@ -171,8 +173,8 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
     {
       title: "New Bookings",
       value: meta.stats.newBookings.value,
-      trend: meta.stats.newBookings.badge,
-      trendStyles: "text-purple-600 bg-purple-500/10 border-purple-500/20",
+      trend: `${meta.stats.newBookings.badge === "0" ? meta.stats.newBookings.badge : meta.stats.newBookings.badge+" New"}`,
+      trendStyles: "text-red-600 bg-red-500/10 border-red-500/20",
       icon: <CheckCircle className="w-5 h-5 text-purple-500" />,
       bg: "bg-purple-50 dark:bg-purple-950/20",
     },
@@ -203,9 +205,13 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
                 <div className={`p-2.5 rounded-xl ${stat.bg}`}>
                   {stat.icon}
                 </div>
+                {
+                  stat.trend !== "0" &&
                 <Badge variant="outline" className={`font-bold text-[11px] px-2 py-0.5 ${stat.trendStyles}`}>
                   {stat.trend}
                 </Badge>
+                }
+                
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
@@ -323,7 +329,11 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
                   </div>
                   
                   {getSessionStatus(session.startTimeISO, session.slotEndTime).showJoin && session.meetingLink && (
-                    <Link href={session.meetingLink} target="_blank" className="block w-full">
+                    <Link 
+                      href={`https://${session.meetingLink.replace(/^https?:\/\//, "")}`} 
+                      target="_blank" 
+                      className="block w-full"
+                    >
                         <Button className="w-full bg-[#10b981] hover:bg-[#059669] text-white font-bold h-11 flex items-center gap-2">
                         Join Class
                         </Button>
