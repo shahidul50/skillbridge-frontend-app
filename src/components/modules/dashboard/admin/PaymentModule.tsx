@@ -418,7 +418,7 @@ const PaymentModule = ({
               const totalItems = Number(payments.pagination.total) || 0;
               const currentLimit = Number(payments.pagination.limit) || 10;
               // Use totalPage from backend, fallback to manual calculation
-              const totalPages = Number(payments.pagination.totalPage) || Math.ceil(totalItems / currentLimit) || 1;
+              const totalPages = Number(payments.pagination.totalPages) || Math.ceil(totalItems / currentLimit) || 1;
               const currentPage = Number(payments.pagination.page) || 1;
 
               if (totalPages <= 1) return null;

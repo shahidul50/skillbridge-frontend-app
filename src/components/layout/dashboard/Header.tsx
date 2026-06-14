@@ -24,7 +24,7 @@ export function Header() {
           <Input placeholder="Search..." className="pl-10 h-9 bg-secondary/50 border-none w-64" />
         </div>
         <ModeToggle/>
-        <NotificationDropdown/>
+        {/* <NotificationDropdown/> */}
       </div>
     </header>
   )
