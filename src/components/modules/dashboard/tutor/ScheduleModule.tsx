@@ -25,10 +25,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BookingUpdateModal from "./BookingUpdateModal";
 import BookingDetailsModal from "./BookingDetailsModal";
+import DayEventsModal from "./DayEventsModal";
 
 // FullCalendar imports
 import FullCalendar from "@fullcalendar/react";
-import ScheduleCalendar from "./ScheduleCalendar";
+import dynamic from "next/dynamic";
+const ScheduleCalendar = dynamic(() => import("./ScheduleCalendar"), { ssr: false });
 
 
 interface ScheduleModuleProps {
@@ -145,6 +147,23 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
   const closeUpdateModal = useCallback(() => setIsUpdateModalOpen(false), []);
   const closeDetailsModal = useCallback(() => setIsDetailsModalOpen(false), []);
 
+  const [isDayEventsModalOpen, setIsDayEventsModalOpen] = useState(false);
+  const [selectedDayEventsData, setSelectedDayEventsData] = useState<{date: Date | null, events: any[]}>({ date: null, events: [] });
+
+  const closeDayEventsModal = useCallback(() => setIsDayEventsModalOpen(false), []);
+
+  const handleMoreLinkClick = (arg: any) => {
+    if (arg.jsEvent) {
+      arg.jsEvent.preventDefault();
+    }
+    setSelectedDayEventsData({
+      date: arg.date,
+      events: arg.allSegs
+    });
+    setIsDayEventsModalOpen(true);
+  };
+
+
 
 
   const handleEventClick = (arg: any) => {
@@ -252,15 +271,20 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="h-full"
+            transition={{ delay: idx * 0.1, duration: 0.4 }}
+            whileHover={{ y: -5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            className="h-full group"
           >
-            <Card className="h-full border-none shadow-sm hover:shadow-md transition-all hover:-translate-y-1 duration-300 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm border border-white/20 dark:border-slate-800/20 flex flex-col">
+            <Card className="h-full border-none shadow-sm hover:shadow-md transition-shadow bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm border border-white/20 dark:border-slate-800/20 flex flex-col">
               <CardContent className="p-5 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-4">
-                  <div className={cn("p-2 rounded-xl transition-transform group-hover:scale-110", stat.iconBg)}>
+                  <motion.div 
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className={cn("p-2 rounded-xl", stat.iconBg)}
+                  >
                     {stat.icon}
-                  </div>
+                  </motion.div>
                   {stat.status && (
                     <Badge className={cn("text-[10px] font-bold px-2 py-0.5 text-white border-none shadow-sm", stat.statusColor)}>
                       {stat.status}
@@ -288,8 +312,13 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Main Calendar Section */}
-        <div className={cn("lg:col-span-8 space-y-6 order-2 lg:order-1", (isUpdateModalOpen || isDetailsModalOpen) && "z-0 relative")}>
-          <Card className="border-none shadow-sm overflow-hidden min-h-[600px] flex flex-col">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className={cn("lg:col-span-8 space-y-6 order-2 lg:order-1", (isUpdateModalOpen || isDetailsModalOpen) && "z-0 relative")}
+        >
+          <Card className="border-none shadow-sm overflow-hidden min-h-[600px] flex flex-col transition-shadow hover:shadow-md">
             <div className="p-6 border-b flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <h2 className="text-xl font-bold">
@@ -336,12 +365,18 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
               currentTime={currentTime}
               onEventClick={handleEventClick}
               onDatesSet={handleDatesSet}
+              onMoreLinkClick={handleMoreLinkClick}
             />
           </Card>
-        </div>
+        </motion.div>
 
         {/* Sidebar Section */}
-        <div className="lg:col-span-4 space-y-6 order-1 lg:order-2">
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="lg:col-span-4 space-y-6 order-1 lg:order-2"
+        >
           {/* Starting Soon */}
           <Card className="border-none shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
@@ -349,15 +384,22 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
             </CardHeader>
             <CardContent className="space-y-4">
               {meta.startingSoon.length > 0 ? (
-                meta.startingSoon.map((session) => {
+                meta.startingSoon.map((session, idx) => {
                   const status = getSessionStatus(session.startTimeISO, session.endTime);
                   const dateLabel = getDateLabel(session.startTimeISO);
                   
                   return (
-                    <div key={session.bookingId} className={cn(
-                      "p-4 rounded-xl border-l-4 transition-all space-y-4 shadow-sm group",
-                      status.isNear ? "bg-primary/5 border-primary shadow-md" : "bg-muted/30 border-muted-foreground/30 shadow-none"
-                    )}>
+                    <motion.div 
+                      key={session.bookingId} 
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.1, duration: 0.4 }}
+                      whileHover={{ scale: 1.01, x: 5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                      className={cn(
+                        "p-4 rounded-xl border-l-4 transition-colors duration-300 space-y-4 hover:shadow-md group",
+                        status.isNear ? "bg-primary/5 border-primary shadow-sm" : "bg-muted/30 hover:bg-muted/50 border-muted-foreground/30 shadow-none"
+                      )}
+                    >
                       <div className="flex justify-between items-start">
                         <Badge variant={status.isNear ? "default" : "secondary"} className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5">
                           {status.label}
@@ -411,7 +453,7 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
                           </Button>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })
               ) : (
@@ -432,8 +474,15 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
             
             <div className="space-y-3">
               {meta.classLinkHub.length > 0 ? (
-                meta.classLinkHub.map((item) => (
-                  <div key={item.bookingId} className="flex items-center justify-between bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                meta.classLinkHub.map((item, idx) => (
+                  <motion.div 
+                    key={item.bookingId} 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1, duration: 0.4 }}
+                    whileHover={{ scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                    className="flex items-center justify-between bg-slate-800/50 hover:bg-slate-800/80 p-3 rounded-xl border border-slate-700/50 transition-colors"
+                  >
                     <span className="text-[11px] font-bold truncate max-w-[180px]">
                       {item.categoryName} with {item.studentName}
                     </span>
@@ -452,14 +501,14 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
                         SET
                       </span>
                     )}
-                  </div>
+                  </motion.div>
                 ))
               ) : (
                  <p className="text-[11px] text-slate-500 text-center py-4">No active links needed</p>
               )}
             </div>
           </Card>
-        </div>
+        </motion.div>
       </div>
 
       {/* Booking Update Modal */}
@@ -476,6 +525,21 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
         isOpen={isDetailsModalOpen}
         onClose={closeDetailsModal}
         bookingId={selectedBooking?.id || null}
+      />
+
+      <DayEventsModal
+        isOpen={isDayEventsModalOpen}
+        onClose={closeDayEventsModal}
+        date={selectedDayEventsData.date}
+        events={selectedDayEventsData.events}
+        onEventClick={(id, link, status) => {
+          if (status === "COMPLETED") {
+             setSelectedBooking({ id, link, status });
+             setIsDetailsModalOpen(true);
+          } else {
+             openUpdateModal(id, link, status);
+          }
+        }}
       />
     </div>
   );

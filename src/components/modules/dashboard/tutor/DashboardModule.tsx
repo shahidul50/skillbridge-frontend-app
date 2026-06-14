@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import { TDashboardMetaResponse, TDashboardRevenueTrendResponse, TDashboardRevenueTrendParams } from "@/types";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { getDashboardRevenueTrendsAction } from "@/actions/tutor.action";
 import { useRouter } from "next/navigation";
 import { differenceInMinutes, format, isToday, isTomorrow, parseISO, parse, set } from "date-fns";
@@ -150,7 +151,7 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
     },
     {
       title: "Total Earnings",
-      value: `$${meta.stats.totalEarnings.value.toLocaleString()}`,
+      value: `${meta.stats.totalEarnings.value.toLocaleString()} Tk`,
       trend: `${meta.stats.totalEarnings.growth >= 0 ? '+' : ''}${meta.stats.totalEarnings.growth}%`,
       trendStyles: meta.stats.totalEarnings.growth > 0 
         ? "text-emerald-600 bg-emerald-500/10 border-emerald-500/20" 
@@ -199,34 +200,54 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
       {/* Stats grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, idx) => (
-          <Card key={idx} className="border-none shadow-sm hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div className={`p-2.5 rounded-xl ${stat.bg}`}>
-                  {stat.icon}
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1, duration: 0.4 }}
+            whileHover={{ y: -5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            className="h-full group"
+          >
+            <Card className="border-none shadow-sm hover:shadow-md transition-shadow h-full">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <motion.div 
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className={`p-2.5 rounded-xl ${stat.bg}`}
+                  >
+                    {stat.icon}
+                  </motion.div>
+                  {
+                    stat.trend !== "0" &&
+                  <Badge variant="outline" className={`font-bold text-[11px] px-2 py-0.5 ${stat.trendStyles}`}>
+                    {stat.trend}
+                  </Badge>
+                  }
+                  
                 </div>
-                {
-                  stat.trend !== "0" &&
-                <Badge variant="outline" className={`font-bold text-[11px] px-2 py-0.5 ${stat.trendStyles}`}>
-                  {stat.trend}
-                </Badge>
-                }
-                
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                <div className="text-2xl font-bold tracking-tight">
-                    {stat.value}
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                  <div className="text-2xl font-bold tracking-tight">
+                      {stat.value}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Revenue Trends Chart */}
-        <Card className="lg:col-span-2 border-none shadow-sm h-full">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          whileHover={{ y: -5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+          className="lg:col-span-2 h-full"
+        >
+          <Card className="border-none shadow-sm hover:shadow-md transition-shadow h-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
             <div className="space-y-1">
               <CardTitle className="text-xl">Revenue Trends</CardTitle>
@@ -300,18 +321,30 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
             </div>
           </CardContent>
         </Card>
+        </motion.div>
 
         {/* Upcoming Sessions List */}
-        <Card className="border-none shadow-sm h-full flex flex-col">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          whileHover={{ y: -5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+          className="h-full"
+        >
+        <Card className="border-none shadow-sm hover:shadow-md transition-shadow h-full flex flex-col">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl">Upcoming Sessions</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 space-y-4">
             {meta.upcomingSessions.length > 0 ? (
               meta.upcomingSessions.map((session, idx) => (
-                <div 
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1, duration: 0.4 }}
+                  whileHover={{ scale: 1.01, x: 5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                   key={session.bookingId} 
-                  className={`p-4 rounded-xl border-l-4 ${getSessionStatus(session.startTimeISO, session.slotEndTime).isNear ? 'bg-primary/5 border-primary shadow-sm' : 'bg-muted/30 border-muted-foreground/30 shadow-none'} space-y-4`}
+                  className={`p-4 rounded-xl border-l-4 transition-colors duration-300 hover:shadow-md ${getSessionStatus(session.startTimeISO, session.slotEndTime).isNear ? 'bg-primary/5 border-primary shadow-sm' : 'bg-muted/30 hover:bg-muted/50 border-muted-foreground/30 shadow-none'} space-y-4 cursor-pointer`}
                 >
                   <div className="flex justify-between items-start">
                     <Badge variant={getSessionStatus(session.startTimeISO, session.slotEndTime).isNear ? "default" : "secondary"} className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5">
@@ -339,7 +372,7 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
                         </Button>
                     </Link>
                   )}
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="flex flex-col items-center justify-center py-10 text-center space-y-2 opacity-50">
@@ -355,6 +388,7 @@ const DashboardModule: React.FC<DashboardModuleProps> = ({ meta, initialTrends }
             </Link>
           </div>
         </Card>
+        </motion.div>
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ interface ScheduleCalendarProps {
   currentTime: Date;
   onEventClick: (eventData: any) => void;
   onDatesSet: (arg: any) => void;
+  onMoreLinkClick?: (arg: any) => void;
 }
 
 const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
@@ -29,6 +30,7 @@ const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
   currentTime,
   onEventClick,
   onDatesSet,
+  onMoreLinkClick,
 }) => {
   // Map FullCalendar view names to our view state
   const fcViewMap: Record<string, string> = {
@@ -53,32 +55,76 @@ const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
     }
   }, [view, calendarRef]);
 
-  // Transform calendarEvents to FullCalendar EventInput format
+  // Transform calendarEvents to FullCalendar EventInput format, with a custom "more" link simulator for Month view
   const fullCalendarEvents: any[] = useMemo(() => {
-    return events.calendarEvents.map((event) => {
-      const startDate = parseISO(event.dateISO);
-      const startTimeParsed = parse(event.startTime, "h:mm a", startDate);
-      const endTimeParsed = parse(event.endTime, "h:mm a", startDate);
+    let processedRawEvents = [...events.calendarEvents];
 
-      const start = set(startDate, {
-        hours: startTimeParsed.getHours(),
-        minutes: startTimeParsed.getMinutes(),
-        seconds: 0,
+    if (view === "month") {
+      const groupedByDate: Record<string, typeof events.calendarEvents> = {};
+      
+      processedRawEvents.forEach(event => {
+        const dateKey = event.dateISO.split('T')[0];
+        if (!groupedByDate[dateKey]) groupedByDate[dateKey] = [];
+        groupedByDate[dateKey].push(event);
       });
 
-      const end = set(startDate, {
-        hours: endTimeParsed.getHours(),
-        minutes: endTimeParsed.getMinutes(),
-        seconds: 0,
+      processedRawEvents = [];
+      Object.keys(groupedByDate).forEach(dateKey => {
+        const dayEvents = groupedByDate[dateKey];
+        if (dayEvents.length > 3) {
+          // Keep first 2, make 3rd a "more" link
+          processedRawEvents.push(...dayEvents.slice(0, 2));
+          processedRawEvents.push({
+            bookingId: `fake-more-${dateKey}`,
+            categoryName: `+${dayEvents.length - 2} more classes`,
+            studentName: "",
+            dateISO: `${dateKey}T23:59:00`,
+            startTime: "11:59 PM",
+            endTime: "11:59 PM",
+            meetingLink: null,
+            bookingStatus: "MORE",
+            // We pass the full hidden events so we can show them in the modal
+            _hiddenEventsForModal: dayEvents
+          } as any);
+        } else {
+          processedRawEvents.push(...dayEvents);
+        }
       });
+    }
 
-      const isPast = end < currentTime;
+    return processedRawEvents.map((event) => {
+      const isFakeMore = event.bookingStatus === "MORE";
+      const startDate = isFakeMore ? new Date(event.dateISO) : parseISO(event.dateISO);
+      
+      let start, end, isPast = false;
+
+      if (isFakeMore) {
+        start = startDate;
+        end = startDate;
+      } else {
+        const startTimeParsed = parse(event.startTime, "h:mm a", startDate);
+        const endTimeParsed = parse(event.endTime, "h:mm a", startDate);
+
+        start = set(startDate, {
+          hours: startTimeParsed.getHours(),
+          minutes: startTimeParsed.getMinutes(),
+          seconds: 0,
+        });
+
+        end = set(startDate, {
+          hours: endTimeParsed.getHours(),
+          minutes: endTimeParsed.getMinutes(),
+          seconds: 0,
+        });
+        isPast = end < currentTime;
+      }
 
       return {
         id: event.bookingId,
         title: event.categoryName,
         start: start.toISOString(),
         end: end.toISOString(),
+        allDay: isFakeMore,
         extendedProps: {
           studentName: event.studentName,
           categoryName: event.categoryName,
@@ -87,10 +133,12 @@ const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
           meetingLink: event.meetingLink,
           bookingStatus: event.bookingStatus,
           isPast,
+          isFakeMore,
+          hiddenEventsForModal: (event as any)._hiddenEventsForModal
         },
       };
     });
-  }, [events.calendarEvents, currentTime]);
+  }, [events.calendarEvents, currentTime, view]);
 
   return (
     <>
@@ -100,6 +148,7 @@ const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
           border: none !important;
           padding: 0 !important;
           height: 100% !important;
+          cursor: pointer !important;
         }
         .fc-custom-theme .fc-event-main {
           padding: 0 !important;
@@ -138,21 +187,42 @@ const ScheduleCalendar: React.FC<ScheduleCalendarProps> = ({
           firstDay={6}
           headerToolbar={false}
           events={fullCalendarEvents}
-          eventClick={onEventClick}
+          eventClick={(arg) => {
+             const props = arg.event.extendedProps;
+             if (props.isFakeMore && onMoreLinkClick) {
+                 // Trigger our custom modal
+                 onMoreLinkClick({ 
+                    date: arg.event.start, 
+                    allSegs: props.hiddenEventsForModal || [] 
+                 });
+                 return;
+             }
+             onEventClick(arg);
+          }}
           datesSet={onDatesSet}
           height="auto"
           slotMinTime="08:00:00"
           slotMaxTime="22:00:00"
           allDaySlot={false}
           nowIndicator={true}
-          dayMaxEvents={3}
+          dayMaxEvents={false}
           slotDuration="00:30:00"
           slotLabelInterval="01:00:00"
           expandRows={true}
           stickyHeaderDates={true}
           eventContent={(arg) => {
-            const { studentName, categoryName, startTimeLabel, endTimeLabel, isPast } = arg.event.extendedProps;
+            const { studentName, categoryName, startTimeLabel, endTimeLabel, isPast, isFakeMore } = arg.event.extendedProps;
             
+            if (isFakeMore) {
+               return (
+                  <div className="w-full text-center py-0.5 px-1 cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/40 rounded-sm transition-colors">
+                     <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                        {categoryName}
+                     </span>
+                  </div>
+               );
+            }
+
             if (arg.view.type === "timeGridDay" || arg.view.type === "timeGridWeek") {
               return (
                 <div className={cn(
