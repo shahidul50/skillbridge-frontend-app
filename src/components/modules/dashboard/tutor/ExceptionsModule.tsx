@@ -115,9 +115,26 @@ export default function ExceptionsModule() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.06,
+        when: 'beforeChildren',
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 8 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.28 } },
+  };
+
   if (isLoading && exceptions.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+      <div className="flex flex-col items-center justify-center min-h-100 gap-4">
         <Loader2 className="size-8 animate-spin text-[#008f5d]" />
         <p className="text-muted-foreground animate-pulse font-medium text-sm">Loading your date exceptions...</p>
       </div>
@@ -125,9 +142,9 @@ export default function ExceptionsModule() {
   }
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={containerVariants}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
             Date Exceptions
@@ -144,10 +161,10 @@ export default function ExceptionsModule() {
           <CalendarX className="size-4.5" />
           Add Exception
         </Button>
-      </div>
+      </motion.div>
 
       {/* Exceptions Table Card */}
-      <div className="bg-card border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
+      <motion.div variants={itemVariants} className="bg-card border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -158,7 +175,7 @@ export default function ExceptionsModule() {
                 <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Reason
                 </th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 text-right w-[120px]">
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 text-right w-30">
                   Actions
                 </th>
               </tr>
@@ -172,9 +189,8 @@ export default function ExceptionsModule() {
                       <motion.tr
                         key={exceptionId}
                         layout
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
+                        variants={itemVariants}
+                        exit={{ opacity: 0, scale: 0.95, y: 6 }}
                         transition={{ duration: 0.15 }}
                         className="hover:bg-zinc-50/40 dark:hover:bg-zinc-900/10 transition-colors group"
                       >
@@ -234,15 +250,10 @@ export default function ExceptionsModule() {
             </tbody>
           </table>
         </div>
-      </div>
+      </motion.div>
 
       {/* Overriding Logic alert box */}
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-emerald-50/40 dark:bg-emerald-950/10 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-5 flex gap-4 items-start"
-      >
+      <motion.div variants={itemVariants} className="bg-emerald-50/40 dark:bg-emerald-950/10 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-5 flex gap-4 items-start">
         <div className="p-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#008f5d] dark:text-emerald-400 shrink-0">
           <Info className="size-5" />
         </div>
@@ -265,7 +276,7 @@ export default function ExceptionsModule() {
 
       {/* Delete Confirmation Modal */}
       <Dialog open={!!deleteConfirmId} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
-        <DialogContent className="sm:max-w-[440px] rounded-2xl p-6 border-none shadow-2xl bg-background">
+        <DialogContent className="sm:max-w-110 rounded-2xl p-6 border-none shadow-2xl bg-background">
           <DialogHeader className="mb-4 relative">
             <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
               Delete Exception?
@@ -298,6 +309,6 @@ export default function ExceptionsModule() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }

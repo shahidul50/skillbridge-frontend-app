@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { TAdminStatsResponse } from "@/types/admin.type";
+import { motion } from "framer-motion";
 
 interface DashboardModuleProps {
   stats: TAdminStatsResponse;
@@ -66,35 +67,48 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((stat, index) => (
-          <Card key={index} className="border-none shadow-sm dark:bg-zinc-900/50">
-            <CardContent className="pt-6">
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 tracking-wider">
-                  {stat.title}
-                </span>
-                <div className={`${stat.bgColor} p-2 rounded-lg`}>
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Card className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden relative group transition-all duration-500 hover:shadow-xl hover:-translate-y-2 border-t-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 h-full">
+              <div className={`absolute top-0 left-0 w-full h-0.5 opacity-0 group-hover:opacity-100 transition-all duration-500 ${stat.color.replace('text-', 'bg-')}`} />
+              <CardContent className="pt-6">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 tracking-wider">
+                    {stat.title}
+                  </span>
+                  <div className={`${stat.bgColor} p-3.5 rounded-2xl transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-sm group-hover:shadow-md`}>
+                    <stat.icon className={`h-5 w-5 ${stat.color} transition-transform duration-500`} />
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-3xl font-bold tracking-tight">
-                  {stat.value}
-                </h3>
-                <Link
-                  href={stat.link}
-                  className="inline-flex items-center text-sm font-medium text-emerald-500 hover:underline transition-all"
-                >
-                  View Details
-                  <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-bold tracking-tight">
+                    {stat.value}
+                  </h3>
+                  <Link
+                    href={stat.link}
+                    className="inline-flex items-center text-sm font-medium text-emerald-500 hover:underline transition-all group/link"
+                  >
+                    View Details
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
-      </div> 
+      </div>
 
       {/* Recent Bookings */}
-      <Card className="border-none shadow-sm dark:bg-zinc-900/50">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+      <Card className="border-none shadow-sm dark:bg-zinc-900/50 hover:shadow-md transition-shadow">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div>
             <CardTitle className="text-xl font-bold">Recent Bookings</CardTitle>
@@ -136,7 +150,13 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
               </TableHeader>
               <TableBody>
                 {stats.recentBookings.map((booking, index) => (
-                  <TableRow key={index} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800">
+                  <motion.tr
+                    key={index}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.5 + index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                    className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 border-b transition-colors"
+                  >
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">
@@ -205,16 +225,22 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
                         {booking.status}
                       </Badge>
                     </TableCell>
-                  </TableRow>
+                  </motion.tr>
                 ))}
               </TableBody>
             </Table>
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       {/* Recent Transactions */}
-      <Card className="border-none shadow-sm dark:bg-zinc-900/50">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+      <Card className="border-none shadow-sm dark:bg-zinc-900/50 hover:shadow-md transition-shadow">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div>
             <CardTitle className="text-xl font-bold">Recent Transactions</CardTitle>
@@ -253,7 +279,13 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
               </TableHeader>
               <TableBody>
                 {stats.recentPayments.map((payment, index) => (
-                  <TableRow key={index} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800">
+                  <motion.tr
+                    key={index}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.65 + index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                    className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 border-zinc-100 dark:border-zinc-800 border-b transition-colors"
+                  >
                     <TableCell className="font-medium text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase">
                       {payment.transactionId}
                     </TableCell>
@@ -280,13 +312,14 @@ const DashboardModule = ({ stats }: DashboardModuleProps) => {
                         {payment.status}
                       </Badge>
                     </TableCell>
-                  </TableRow>
+                  </motion.tr>
                 ))}
               </TableBody>
             </Table>
           </div>
         </CardContent>
       </Card>
+      </motion.div>
     </div>
   );
 };

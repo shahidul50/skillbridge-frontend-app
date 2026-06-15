@@ -13,7 +13,7 @@ const ReadyToTakeSkill = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="bg-zinc-950 rounded-[2rem] p-8 md:p-16 lg:p-20 text-center relative overflow-hidden"
         >
           {/* Subtle Background Glow */}

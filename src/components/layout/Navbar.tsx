@@ -35,14 +35,18 @@ const navLinks = [
 export default function Navbar() {
     const [session, setSession] = useState<any>(null);
     const router = useRouter();
+    const [mounted, setMounted] = useState(false);
  
     useEffect(() => {
+        setMounted(true);
         const fetchSession = async () => {
             const sessionData = await getUserSession();
             setSession(sessionData?.data);
         };
         fetchSession();
     }, []);
+
+    if (!mounted) return null;
 
     const handleLogout = async () => {
         try {

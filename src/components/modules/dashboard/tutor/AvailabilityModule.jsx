@@ -1,6 +1,7 @@
 "use client";
 
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import DayRow from "./DayRow";
 import AddSlotModal from "./AddSlotModal";
 import { 
@@ -126,18 +127,48 @@ const AvailabilityModule = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.08,
+        when: "beforeChildren",
+      },
+    },
+  };
+
+  const rowVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.35, ease: "easeOut" },
+    },
+  };
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-slate-800 dark:text-white">
+      <motion.div
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4 text-slate-800 dark:text-white"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
         <div>
           <h1 className="text-2xl font-bold font-tight">Manage Availability</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
             Set your recurring weekly teaching hours. Use toggles to activate or deactivate slots.
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {loading ? (
         <div className="space-y-4">
@@ -148,14 +179,15 @@ const AvailabilityModule = () => {
       ) : (
         <div className="space-y-4">
           {DAYS_OF_WEEK.map((day) => (
-            <DayRow
-              key={day}
-              day={day}
-              slots={availability[day]}
-              onToggleSlot={(id, status) => handleToggleSlot(day, id, status)}
-              onDeleteSlot={(id) => handleDeleteSlot(day, id)}
-              onAddSlot={() => openModal(day)}
-            />
+            <motion.div key={day} variants={rowVariants}>
+              <DayRow
+                day={day}
+                slots={availability[day]}
+                onToggleSlot={(id, status) => handleToggleSlot(day, id, status)}
+                onDeleteSlot={(id) => handleDeleteSlot(day, id)}
+                onAddSlot={() => openModal(day)}
+              />
+            </motion.div>
           ))}
         </div>
       )}
@@ -169,7 +201,7 @@ const AvailabilityModule = () => {
         setNewSlotData={setNewSlotData}
         onAddSlot={handleAddSlot}
       />
-    </div>
+    </motion.div>
   );
 };
 

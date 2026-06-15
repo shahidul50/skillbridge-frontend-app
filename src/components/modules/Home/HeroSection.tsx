@@ -35,7 +35,7 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col space-y-8"
           >
             <div className="space-y-4">
@@ -107,7 +107,7 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
           <motion.div 
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="relative"
           >
             {/* Main Hero Image */}
@@ -134,7 +134,7 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute -bottom-6 -left-6 md:-left-10 bg-white p-5 rounded-2xl shadow-xl border border-border/10 max-w-[220px] hidden sm:block dark:bg-muted"
+              className="absolute -bottom-6 -left-6 md:-left-10 bg-white p-5 rounded-2xl shadow-xl border border-border/10 max-w-55 hidden sm:block dark:bg-muted"
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">

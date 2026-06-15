@@ -51,10 +51,48 @@ import {
 } from "@/components/ui/pagination";
 import BookingReciptModal from "./BookingReciptModal";
 
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+
 interface BookingModuleProps {
   bookings: TBookingResponse;
   stats: TBookingStatsResponse;
 }
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+const tableRowVariants: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.04,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
+  exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
+};
 
 export default function BookingModule({ bookings, stats }: BookingModuleProps) {
   const router = useRouter();
@@ -165,34 +203,65 @@ export default function BookingModule({ bookings, stats }: BookingModuleProps) {
   ];
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        variants={containerVariants}
+      >
         {statsCards.map((card, index) => (
-          <Card key={index} className="border-none shadow-sm dark:bg-zinc-900/50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 group cursor-default">
-            <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{card.title}</p>
-                  <h3 className="text-3xl font-bold mt-1">{card.value}</h3>
+          <motion.div key={index} variants={cardVariants}>
+            <Card className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden relative group transition-all duration-500 hover:shadow-xl hover:-translate-y-2 border-t-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 h-full cursor-default">
+              <div
+                className={`absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 ${card.color.replace(
+                  "text-",
+                  "bg-"
+                )}`}
+              />
+              <CardContent className="pt-6 px-6 pb-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <p className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
+                      {card.title}
+                    </p>
+                    <h3 className="text-3xl font-bold mt-1 tracking-tight">
+                      {card.value}
+                    </h3>
+                  </div>
+                  <div
+                    className={`${card.bgColor} p-3.5 rounded-2xl transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-sm group-hover:shadow-md`}
+                  >
+                    <card.icon
+                      className={`h-5 w-5 ${card.color} transition-transform duration-500`}
+                    />
+                  </div>
                 </div>
-                <div className={`${card.bgColor} p-2 rounded-lg group-hover:scale-110 transition-transform duration-300`}>
-                  <card.icon className={`h-5 w-5 ${card.color}`} />
+                <div className="flex items-center gap-1.5 pt-2">
+                  {card.trendIcon && (
+                    <card.trendIcon
+                      className={`h-3.5 w-3.5 ${card.trendColor}`}
+                    />
+                  )}
+                  <p
+                    className={`text-xs font-medium ${card.trendColor || "text-muted-foreground"}`}
+                  >
+                    {card.description}
+                  </p>
                 </div>
-              </div>
-              <div className="flex items-center gap-1.5 pt-2">
-                {card.trendIcon && <card.trendIcon className={`h-3.5 w-3.5 ${card.trendColor}`} />}
-                <p className={`text-xs font-medium ${card.trendColor || "text-muted-foreground"}`}>
-                  {card.description}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Main Table Card */}
-      <Card className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden">
+      <motion.div variants={cardVariants}>
+        <Card className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden">
         <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <h2 className="text-xl font-bold">Recent Bookings</h2>
           
@@ -251,77 +320,114 @@ export default function BookingModule({ bookings, stats }: BookingModuleProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {bookings?.data?.length > 0 ? (
-                bookings.data.map((booking, index) => (
-                  <TableRow key={booking.bookingId} className="border-zinc-100 dark:border-zinc-800 transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
-                    <TableCell className="font-medium text-center">
-                      {(currentPage - 1) * currentLimit + index + 1}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-sm">{booking.studentName}</span>
-                        <span className="text-xs text-muted-foreground">{booking.studentEmail}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-sm">{booking.tutorName}</span>
-                        <span className="text-xs text-muted-foreground">{booking.tutorEmail}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-xs font-medium px-2 py-1 bg-zinc-100 dark:bg-zinc-800 rounded text-zinc-600 dark:text-zinc-400">
-                        {Array.isArray(booking.tutorCategoryName) ? booking.tutorCategoryName.join(", ") : booking.tutorCategoryName}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">{format(new Date(booking.availabilitySlotDate), "MMM dd, yyyy")}</span>
-                        <span className="text-xs text-muted-foreground">{booking.availabilitySlotStartTime} - {booking.availabilitySlotEndTime}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-bold text-sm">
-                      Tk {booking.amount?.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge
-                        variant="secondary"
-                        className={`text-[10px] font-bold uppercase py-1 px-3 rounded-full border-none ${
-                          booking.bookingStatus === "CONFIRMED"
-                            ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                            : booking.bookingStatus === "PENDING"
-                            ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
-                            : booking.bookingStatus === "COMPLETED"
-                            ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
-                            : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
-                        }`}
-                      >
-                        {booking.bookingStatus}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
-                        title="View Receipt"
-                        onClick={() => {
-                          setSelectedBookingId(booking.bookingId);
-                          setIsReceiptModalOpen(true);
-                        }}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
+              <AnimatePresence mode="popLayout">
+                {bookings?.data?.length > 0 ? (
+                  bookings.data.map((booking, index) => (
+                    <motion.tr
+                      key={booking.bookingId}
+                      custom={index}
+                      variants={tableRowVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      layout
+                      className="border-zinc-100 dark:border-zinc-800 transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30"
+                    >
+                      <TableCell className="font-medium text-center">
+                        {(currentPage - 1) * currentLimit + index + 1}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-sm">
+                            {booking.studentName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {booking.studentEmail}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-sm">
+                            {booking.tutorName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {booking.tutorEmail}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-xs font-medium px-2 py-1 bg-zinc-100 dark:bg-zinc-800 rounded text-zinc-600 dark:text-zinc-400">
+                          {Array.isArray(booking.tutorCategoryName)
+                            ? booking.tutorCategoryName.join(", ")
+                            : booking.tutorCategoryName}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium">
+                            {format(
+                              new Date(booking.availabilitySlotDate),
+                              "MMM dd, yyyy"
+                            )}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {booking.availabilitySlotStartTime} -{" "}
+                            {booking.availabilitySlotEndTime}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-bold text-sm">
+                        Tk {booking.amount?.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge
+                          variant="secondary"
+                          className={`text-[10px] font-bold uppercase py-1 px-3 rounded-full border-none ${
+                            booking.bookingStatus === "CONFIRMED"
+                              ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                              : booking.bookingStatus === "PENDING"
+                                ? "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400"
+                                : booking.bookingStatus === "COMPLETED"
+                                  ? "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
+                                  : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
+                          }`}
+                        >
+                          {booking.bookingStatus}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <motion.div
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                            title="View Receipt"
+                            onClick={() => {
+                              setSelectedBookingId(booking.bookingId);
+                              setIsReceiptModalOpen(true);
+                            }}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </motion.div>
+                      </TableCell>
+                    </motion.tr>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="h-24 text-center text-muted-foreground"
+                    >
+                      No bookings found.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
-                    No bookings found.
-                  </TableCell>
-                </TableRow>
-              )}
+                )}
+              </AnimatePresence>
             </TableBody>
           </Table>
         </div>
@@ -403,12 +509,13 @@ export default function BookingModule({ bookings, stats }: BookingModuleProps) {
           )}
         </div>
       </Card>
+    </motion.div>
 
-      <BookingReciptModal
-        isOpen={isReceiptModalOpen}
-        onOpenChange={setIsReceiptModalOpen}
-        bookingId={selectedBookingId}
-      />
-    </div>
-  );
+    <BookingReciptModal
+      isOpen={isReceiptModalOpen}
+      onOpenChange={setIsReceiptModalOpen}
+      bookingId={selectedBookingId}
+    />
+  </motion.div>
+);
 }

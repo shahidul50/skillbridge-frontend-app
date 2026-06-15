@@ -29,13 +29,50 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Search, Eye, Ban, CheckCircle, Loader2 } from "lucide-react";
+import { Search, Eye, Ban, CheckCircle, Loader2, X } from "lucide-react";
 import { TUser, TUserParams } from "@/types/admin.type";
 import { bannedUserAccountAction, getUserProfileDetailsByUserIdAction } from "@/actions/admin.action";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import ProfileDetailsModal from "./ProfileDetailsModal";
 import { TStudentProfileResponse, TTutorProfileResponse } from "@/types/admin.type";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+const tableRowVariants: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
+  exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
+};
 
 interface UserModuleProps {
   initialData: TUser[] | any;
@@ -55,6 +92,11 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeProfile, setActiveProfile] = useState<TTutorProfileResponse | TStudentProfileResponse | null>(null);
   const [isFetchingProfile, setIsFetchingProfile] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Local state for instant UI feedback on search
   const [searchTerm, setSearchTerm] = useState(searchParams.get("searchTerm") || "");
@@ -143,9 +185,16 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
     setActiveProfile(null);
   };
 
+  if (!mounted) return null;
+
   return (
-    <div className="container mx-auto space-y-6">
-      <div className="flex flex-col gap-1">
+    <motion.div
+      className="container mx-auto space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div variants={itemVariants} className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">User Management</h1>
             {isPending && <Loader2 className="h-5 w-5 animate-spin text-primary" />}
@@ -153,10 +202,13 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
         <p className="text-muted-foreground">
           Oversee and manage student and tutor accounts.
         </p>
-      </div>
+      </motion.div>
 
       {/* Filters Section */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-card p-5 rounded-xl border border-border shadow-sm">
+      <motion.div
+        variants={itemVariants}
+        className="flex flex-col md:flex-row gap-4 items-center justify-between bg-card p-5 rounded-xl border border-border shadow-sm"
+      >
         <div className="relative w-full md:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -165,6 +217,20 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <AnimatePresence>
+            {searchTerm && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                onClick={() => setSearchTerm("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 rounded-md transition-colors"
+                title="Clear search"
+              >
+                <X className="h-4 w-4" />
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
         <div className="flex flex-wrap gap-3 w-full md:w-auto">
           <Select
@@ -198,10 +264,13 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
             </SelectContent>
           </Select>
         </div>
-      </div>
+      </motion.div>
 
       {/* Table Section */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm relative">
+      <motion.div
+        variants={itemVariants}
+        className="rounded-xl border border-border bg-card overflow-hidden shadow-sm relative"
+      >
         {isPending && (
             <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -218,18 +287,33 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} className="py-20 text-center text-muted-foreground">
-                  <div className="flex flex-col items-center gap-2">
-                    <Search className="h-10 w-10 opacity-20" />
-                    <p className="text-lg">No users found match your criteria.</p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              users.map((user: TUser) => (
-                <TableRow key={user.id} className="hover:bg-muted/30 transition-colors border-b">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {users.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="py-20 text-center text-muted-foreground"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <Search className="h-10 w-10 opacity-20" />
+                      <p className="text-lg">
+                        No users found match your criteria.
+                      </p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                users.map((user: TUser, index: number) => (
+                  <motion.tr
+                    key={user.id}
+                    custom={index}
+                    variants={tableRowVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    layout
+                    className="hover:bg-muted/30 transition-colors border-b"
+                  >
                   <TableCell className="py-4 px-6">
                     <div className="flex items-center gap-4">
                       <Avatar className="h-10 w-10 border border-border shadow-sm">
@@ -267,38 +351,47 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
                   </TableCell>
                   <TableCell className="py-4 px-6 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
-                        title="View Profile"
-                        onClick={() => handleViewProfile(user.id)}
-                        disabled={isFetchingProfile}
-                      >
-                        <Eye className="h-4.5 w-4.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={`h-9 w-9 transition-all ${
-                          user.isActive
-                            ? "text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20"
-                            : "text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
-                        }`}
-                        title={user.isActive ? "Ban User" : "Activate User"}
-                        onClick={() => handleToggleUserStatus(user.id, user.isActive)}
-                        disabled={isPending}
-                      >
-                        {user.isActive ? <Ban className="h-4.5 w-4.5" /> : <CheckCircle className="h-4.5 w-4.5" />}
-                      </Button>
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-9 w-9 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
+                          title="View Profile"
+                          onClick={() => handleViewProfile(user.id)}
+                          disabled={isFetchingProfile}
+                        >
+                          <Eye className="h-4.5 w-4.5" />
+                        </Button>
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={`h-9 w-9 transition-all ${
+                            user.isActive
+                              ? "text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                              : "text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                          }`}
+                          title={user.isActive ? "Ban User" : "Activate User"}
+                          onClick={() => handleToggleUserStatus(user.id, user.isActive)}
+                          disabled={isPending}
+                        >
+                          {user.isActive ? (
+                            <Ban className="h-4.5 w-4.5" />
+                          ) : (
+                            <CheckCircle className="h-4.5 w-4.5" />
+                          )}
+                        </Button>
+                      </motion.div>
                     </div>
                   </TableCell>
-                </TableRow>
+                </motion.tr>
               ))
             )}
+            </AnimatePresence>
           </TableBody>
         </Table>
-      </div>
+      </motion.div>
 
       {/* Pagination Section */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2">
@@ -379,6 +472,6 @@ export default function UserModule({ initialData, initialMeta }: UserModuleProps
         onOpenChange={(open) => !open && handleCloseModal()}
         data={activeProfile}
       />
-    </div>
+    </motion.div>
   );
 }

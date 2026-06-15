@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { 
   Dialog, 
@@ -108,26 +109,38 @@ export default function AddExceptionModal({
   const endWeek = endOfWeek(endMonth);
   const calendarDays = eachDayOfInterval({ start: startWeek, end: endWeek });
 
+  const modalVariants = {
+    hidden: { opacity: 0, y: -8, scale: 0.99 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.18 } },
+    exit: { opacity: 0, y: 8, scale: 0.99, transition: { duration: 0.12 } },
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[440px] rounded-2xl p-6 border-none shadow-2xl bg-background">
-        <DialogHeader className="mb-5 relative">
-          <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-            Add Date Exception
-          </DialogTitle>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5 leading-relaxed">
-            Set a specific date where you will be unavailable for sessions.
-          </p>
-        </DialogHeader>
-
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
-          }} 
-          className="space-y-5"
+      <DialogContent className="sm:max-w-110 rounded-2xl p-6 border-none shadow-2xl bg-background">
+        <motion.div
+          initial="hidden"
+          animate={isOpen ? 'visible' : 'hidden'}
+          exit="exit"
+          variants={modalVariants}
         >
+          <DialogHeader className="mb-5 relative">
+            <DialogTitle className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+              Add Date Exception
+            </DialogTitle>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5 leading-relaxed">
+              Set a specific date where you will be unavailable for sessions.
+            </p>
+          </DialogHeader>
+
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              form.handleSubmit();
+            }} 
+            className="space-y-5"
+          >
           <FieldGroup className="gap-5">
             {/* Select Date Input */}
             <form.Field name="date" children={(field) => {
@@ -159,7 +172,7 @@ export default function AddExceptionModal({
                           className="fixed inset-0 z-40 bg-transparent" 
                           onClick={() => setIsCalendarOpen(false)}
                         />
-                        <div className="absolute top-[52px] left-0 z-50 w-full max-w-[320px] bg-background border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl p-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="absolute top-13 left-0 z-50 w-full max-w-[320px] bg-background border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl p-4 animate-in fade-in slide-in-from-top-2 duration-200">
                           {/* Calendar Month Selector Header */}
                           <div className="flex items-center justify-between mb-3">
                             <button 
@@ -246,7 +259,7 @@ export default function AddExceptionModal({
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     placeholder="e.g. Public Holiday, Medical Leave, Personal Appointment..."
-                    className="min-h-[100px] p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-emerald-500 focus:border-emerald-500 focus-visible:ring-emerald-500 resize-none leading-relaxed"
+                    className="min-h-25 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-emerald-500 focus:border-emerald-500 focus-visible:ring-emerald-500 resize-none leading-relaxed"
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
@@ -273,6 +286,7 @@ export default function AddExceptionModal({
             </Button>
           </div>
         </form>
+        </motion.div>
       </DialogContent>
     </Dialog>
   );

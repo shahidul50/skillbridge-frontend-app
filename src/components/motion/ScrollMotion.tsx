@@ -45,7 +45,7 @@ export function ScrollMotion({
       whileInView="visible"
       viewport={{ once: viewportOnce, margin: "-50px" }}
       variants={variants[variant]}
-      transition={{ duration, delay, ease: "easeOut" }}
+      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
       {...props}
     >

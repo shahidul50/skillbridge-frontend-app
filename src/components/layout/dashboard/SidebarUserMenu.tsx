@@ -18,18 +18,24 @@ import { authClient } from "@/lib/auth-client"
 import { getInitials } from "@/lib/utils"
 function SidebarUserMenu() {
     const { isMobile } = useSidebar()
-        const [session, setSession] = useState<any>(null);
-        const router = useRouter();
+    const [mounted, setMounted] = useState(false)
+    const [session, setSession] = useState<any>(null);
+    const router = useRouter();
      
-        useEffect(() => {
-            const fetchSession = async () => {
-                const sessionData = await getUserSession();
-                setSession(sessionData?.data);
-            };
-            fetchSession();
-        }, []);
+    useEffect(() => {
+        setMounted(true)
+        const fetchSession = async () => {
+            const sessionData = await getUserSession();
+            setSession(sessionData?.data);
+        };
+        fetchSession();
+    }, []);
     
-        const handleLogout = async () => {
+    if (!mounted) {
+        return null // Or a skeleton if you prefer, but null is safest for hydration
+    }
+
+    const handleLogout = async () => {
             try {
                 await authClient.signOut({
                     fetchOptions: {

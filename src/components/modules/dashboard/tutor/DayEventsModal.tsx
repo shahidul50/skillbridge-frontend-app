@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { format } from "date-fns";
+import { format, parse, set } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ interface DayEventsModalProps {
   date: Date | null;
   events: any[];
   onEventClick: (eventId: string, meetingLink: string | null, status: string) => void;
+  currentTime?: Date;
 }
 
 const DayEventsModal: React.FC<DayEventsModalProps> = ({
@@ -25,6 +26,7 @@ const DayEventsModal: React.FC<DayEventsModalProps> = ({
   date,
   events,
   onEventClick,
+  currentTime = new Date(),
 }) => {
   if (!date) return null;
 
@@ -50,7 +52,26 @@ const DayEventsModal: React.FC<DayEventsModalProps> = ({
               const eventId = argEvent.event ? argEvent.event.id : argEvent.bookingId;
               
               const startDateTime = eventProps.dateISO ? new Date(eventProps.dateISO) : new Date();
-              const isPast = eventProps.isPast !== undefined ? eventProps.isPast : startDateTime < new Date();
+              
+              let isPast = eventProps.isPast;
+              if (isPast === undefined) {
+                if (eventProps.endTime) {
+                  try {
+                    const endTimeParsed = parse(eventProps.endTime, "h:mm a", startDateTime);
+                    const endDateTime = set(startDateTime, {
+                      hours: endTimeParsed.getHours(),
+                      minutes: endTimeParsed.getMinutes(),
+                      seconds: 0,
+                      milliseconds: 0
+                    });
+                    isPast = endDateTime < currentTime;
+                  } catch (e) {
+                    isPast = startDateTime < currentTime;
+                  }
+                } else {
+                  isPast = startDateTime < currentTime;
+                }
+              }
 
               return (
                 <div

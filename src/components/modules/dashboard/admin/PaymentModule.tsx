@@ -53,6 +53,7 @@ import { toast } from "sonner";
 import { verifyPaymentTransactionForAdminDashboardAction } from "@/actions/payment.action";
 
 import PaymentVerifyModal from "./PaymentVerifyModal";
+import { motion } from "framer-motion";
 
 interface PaymentModuleProps {
   payments: TPaymentResponse;
@@ -193,46 +194,57 @@ const PaymentModule = ({
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCardsData.map((stat, index) => (
-          <Card 
-            key={index} 
-            className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden relative group transition-all duration-500 hover:shadow-xl hover:-translate-y-2 border-t-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-800"
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className={`absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 ${stat.color.replace('text-', 'bg-')}`} />
-            <CardContent className="pt-6">
-              <div className="flex justify-between items-start mb-5">
-                <div className={`${stat.bgColor} p-3.5 rounded-2xl transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-sm group-hover:shadow-md`}>
-                  <stat.icon className={`h-6 w-6 ${stat.color} transition-transform duration-500`} />
+            <Card 
+              className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden relative group transition-all duration-500 hover:shadow-xl hover:-translate-y-2 border-t-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 h-full"
+            >
+              <div className={`absolute top-0 left-0 w-full h-0.5 opacity-0 group-hover:opacity-100 transition-all duration-500 ${stat.color.replace('text-', 'bg-')}`} />
+              <CardContent className="pt-6">
+                <div className="flex justify-between items-start mb-5">
+                  <div className={`${stat.bgColor} p-3.5 rounded-2xl transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 shadow-sm group-hover:shadow-md`}>
+                    <stat.icon className={`h-6 w-6 ${stat.color} transition-transform duration-500`} />
+                  </div>
+                  <Badge 
+                    variant="secondary" 
+                    className={`border-none ${
+                      stat.trendValue > 0 
+                        ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10' 
+                        : stat.trendValue < 0 
+                        ? 'bg-red-50 text-red-600 dark:bg-red-500/10' 
+                        : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'
+                    } flex items-center gap-1 font-bold`}
+                  >
+                    {stat.trendValue > 0 && <TrendingUp className="h-3 w-3" />}
+                    {stat.trendValue < 0 && <TrendingDown className="h-3 w-3" />}
+                    {stat.trend}
+                  </Badge>
                 </div>
-                <Badge 
-                  variant="secondary" 
-                  className={`border-none ${
-                    stat.trendValue > 0 
-                      ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10' 
-                      : stat.trendValue < 0 
-                      ? 'bg-red-50 text-red-600 dark:bg-red-500/10' 
-                      : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400'
-                  } flex items-center gap-1 font-bold`}
-                >
-                  {stat.trendValue > 0 && <TrendingUp className="h-3 w-3" />}
-                  {stat.trendValue < 0 && <TrendingDown className="h-3 w-3" />}
-                  {stat.trend}
-                </Badge>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                  {stat.title}
-                </p>
-                <h3 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  {stat.value}
-                </h3>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                    {stat.title}
+                  </p>
+                  <h3 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    {stat.value}
+                  </h3>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
       </div>
 
       {/* Main Table Content */}
-      <Card className="border-none shadow-sm dark:bg-zinc-900/50">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+      <Card className="border-none shadow-sm dark:bg-zinc-900/50 hover:shadow-md transition-shadow">
         <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-zinc-100 dark:border-zinc-800">
           <div>
             <CardTitle className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Payments Overview</CardTitle>
@@ -267,7 +279,7 @@ const PaymentModule = ({
               value={searchParams.status || "ALL"} 
               onValueChange={handleStatusChange}
             >
-              <SelectTrigger className="w-[140px] bg-zinc-50/50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 h-10">
+              <SelectTrigger className="w-35 bg-zinc-50/50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 h-10">
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
@@ -324,10 +336,13 @@ const PaymentModule = ({
                       </TableCell>
                     </TableRow>
                   ) : (
-                    payments.data.map((payment) => (
-                      <TableRow 
-                        key={payment.paymentId} 
-                        className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 border-zinc-100 dark:border-zinc-800 transition-colors duration-200"
+                    payments.data.map((payment, index) => (
+                      <motion.tr
+                        key={payment.paymentId}
+                        initial={{ opacity: 0, x: -16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.5 + index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                        className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 border-zinc-100 dark:border-zinc-800 border-b transition-colors duration-200"
                       >
                         <TableCell className="pl-6 font-mono text-[13px] font-bold text-emerald-600 dark:text-emerald-500">
                           #{payment.transactionId}
@@ -375,7 +390,7 @@ const PaymentModule = ({
                             <Pencil className="h-4 w-4 text-zinc-400 group-hover/edit:text-emerald-600 transition-colors" />
                           </Button>
                         </TableCell>
-                      </TableRow>
+                      </motion.tr>
                     ))
                   )}
                 </TableBody>
@@ -400,10 +415,10 @@ const PaymentModule = ({
                   value={payments.pagination.limit.toString()} 
                   onValueChange={handleLimitChange}
                 >
-                  <SelectTrigger className="w-[70px] h-9 bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 rounded-lg">
+                  <SelectTrigger className="w-17.5 h-9 bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 rounded-lg">
                     <SelectValue placeholder={payments.pagination.limit} />
                   </SelectTrigger>
-                  <SelectContent className="min-w-[70px] dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+                  <SelectContent className="min-w-17.5 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
                     <SelectItem value="5">5</SelectItem>
                     <SelectItem value="10">10</SelectItem>
                     <SelectItem value="20">20</SelectItem>
@@ -504,6 +519,7 @@ const PaymentModule = ({
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       <PaymentVerifyModal
         isOpen={isVerifyModalOpen}

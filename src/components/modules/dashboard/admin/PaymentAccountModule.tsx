@@ -42,6 +42,43 @@ import {
 } from "@/types/admin.type";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AddPaymentAccountModal from "./AddPaymentAccountModal";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+const tableRowVariants: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
+  exit: { opacity: 0, x: 20, transition: { duration: 0.2 } },
+};
 
 interface PaymentAccountModuleProps {
   accounts: TPaymentAccountResponse;
@@ -59,7 +96,14 @@ const PaymentAccountModule = ({
 
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<TPaymentAccount | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<TPaymentAccount | null>(
+    null
+  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Sync searchTerm with URL params
   useEffect(() => {
@@ -127,32 +171,48 @@ const PaymentAccountModule = ({
     setIsModalOpen(true);
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <motion.div
+      className="space-y-6 p-4 md:p-6 lg:p-8"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
+      <motion.div
+        variants={itemVariants}
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-sm"
+      >
         <div className="space-y-1">
           <h1 className="text-3xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
             Add Payment Account
           </h1>
           <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 max-w-2xl">
-            Configure a new disbursement method for tutor payouts and system transactions. 
-            These accounts will be used for automated weekly settlements.
+            Configure a new disbursement method for tutor payouts and system
+            transactions. These accounts will be used for automated weekly
+            settlements.
           </p>
         </div>
-        <Button 
-          onClick={handleAddAccount}
-          className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold gap-2 px-6 h-12 rounded-xl shadow-lg shadow-emerald-700/20 active:scale-95 transition-all"
-        >
-          <PlusCircle className="h-5 w-5" />
-          Add Account
-        </Button>
-      </div>
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            onClick={handleAddAccount}
+            className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold gap-2 px-6 h-12 rounded-xl shadow-lg shadow-emerald-700/20 transition-all w-full md:w-auto"
+          >
+            <PlusCircle className="h-5 w-5" />
+            Add Account
+          </Button>
+        </motion.div>
+      </motion.div>
 
       <hr className="border-zinc-100 dark:border-zinc-800" />
 
       {/* Table Section */}
-      <Card className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden">
+      <motion.div variants={itemVariants}>
+        <Card className="border-none shadow-sm dark:bg-zinc-900/50 overflow-hidden">
         <CardHeader className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-zinc-100 dark:border-zinc-800 px-6">
           <CardTitle className="text-xl font-bold text-zinc-800 dark:text-zinc-200">
             Platform Payment Accounts
@@ -168,15 +228,20 @@ const PaymentAccountModule = ({
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-10 bg-zinc-50/50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-800 focus:ring-emerald-500 h-11 rounded-xl transition-all font-medium"
               />
-              {searchTerm && (
-                <button
-                  type="button"
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
+              <AnimatePresence>
+                {searchTerm && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    type="button"
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                  >
+                    <X className="h-4 w-4" />
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Status Filter */}
@@ -233,55 +298,70 @@ const PaymentAccountModule = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {accounts.data.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="h-48 text-center text-zinc-500 font-medium italic">
-                      No payment accounts found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  accounts.data.map((account, index) => (
-                    <TableRow 
-                      key={account.id} 
-                      className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 border-zinc-100 dark:border-zinc-800 transition-colors"
-                    >
-                      <TableCell className="pl-8 font-bold text-zinc-500">
-                        {String(index + 1).padStart(2, "0")}
-                      </TableCell>
-                      <TableCell className="font-extrabold text-zinc-900 dark:text-zinc-100 uppercase tracking-tight">
-                        {account.accountType}
-                      </TableCell>
-                      <TableCell className="font-black text-zinc-900 dark:text-zinc-100">
-                        {account.method}
-                      </TableCell>
-                      <TableCell className="font-mono font-bold text-zinc-600 dark:text-zinc-400">
-                        {account.accountNumber}
-                      </TableCell>
-                      <TableCell>
-                        <Badge 
-                          className={`rounded-full px-3 py-1 border-none font-bold text-[10px] uppercase tracking-wider ${
-                            account.isActive 
-                              ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400" 
-                              : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
-                          }`}
-                        >
-                          <span className={`w-1.5 h-1.5 rounded-full mr-2 ${account.isActive ? "bg-emerald-500" : "bg-red-500"}`} />
-                          {account.isActive ? "Active" : "Inactive"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-center pr-8">
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-9 w-9 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all text-zinc-400 hover:text-emerald-600"
-                          onClick={() => handleEditAccount(account)}
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
+                <AnimatePresence mode="popLayout">
+                  {accounts.data.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={6}
+                        className="h-48 text-center text-zinc-500 font-medium italic"
+                      >
+                        No payment accounts found
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
+                  ) : (
+                    accounts.data.map((account, index) => (
+                      <motion.tr
+                        key={account.id}
+                        custom={index}
+                        variants={tableRowVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        layout
+                        className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 border-zinc-100 dark:border-zinc-800 transition-colors"
+                      >
+                        <TableCell className="pl-8 font-bold text-zinc-500">
+                          {String(index + 1).padStart(2, "0")}
+                        </TableCell>
+                        <TableCell className="font-extrabold text-zinc-900 dark:text-zinc-100 uppercase tracking-tight">
+                          {account.accountType}
+                        </TableCell>
+                        <TableCell className="font-black text-zinc-900 dark:text-zinc-100">
+                          {account.method}
+                        </TableCell>
+                        <TableCell className="font-mono font-bold text-zinc-600 dark:text-zinc-400">
+                          {account.accountNumber}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`rounded-full px-3 py-1 border-none font-bold text-[10px] uppercase tracking-wider ${
+                              account.isActive
+                                ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                                : "bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400"
+                            }`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full mr-2 ${account.isActive ? "bg-emerald-500" : "bg-red-500"}`}
+                            />
+                            {account.isActive ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center pr-8">
+                          <motion.div whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-9 w-9 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all text-zinc-400 hover:text-emerald-600"
+                              onClick={() => handleEditAccount(account)}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </motion.div>
+                        </TableCell>
+                      </motion.tr>
+                    ))
+                  )}
+                </AnimatePresence>
               </TableBody>
             </Table>
           </div>
@@ -350,13 +430,14 @@ const PaymentAccountModule = ({
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
       <AddPaymentAccountModal
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
         account={selectedAccount}
       />
-    </div>
+    </motion.div>
   );
 };
 

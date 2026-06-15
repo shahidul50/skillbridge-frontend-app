@@ -532,6 +532,7 @@ const ScheduleModule: React.FC<ScheduleModuleProps> = ({ meta, initialEvents }) 
         onClose={closeDayEventsModal}
         date={selectedDayEventsData.date}
         events={selectedDayEventsData.events}
+        currentTime={currentTime}
         onEventClick={(id, link, status) => {
           if (status === "COMPLETED") {
              setSelectedBooking({ id, link, status });
