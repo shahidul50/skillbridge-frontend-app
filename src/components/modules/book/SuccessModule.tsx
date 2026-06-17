@@ -182,7 +182,7 @@ export default function SuccessModule({ bookingDetails }: SuccessModuleProps) {
           variant="outline"
           className="w-full sm:flex-1 h-12 md:h-14 rounded-2xl border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-900 dark:text-white font-extrabold text-base transition-all active:scale-95"
         >
-          <Link href="/dashboard/bookings">View All Bookings</Link>
+          <Link href="/dashboard/booking-history">View All Bookings</Link>
         </Button>
       </div>
     </Container>

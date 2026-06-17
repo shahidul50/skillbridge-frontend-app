@@ -6,3 +6,57 @@ export type TBooking = {
     paymentMethod: string;
     transactionId: string;
 }
+
+// for student dashboard
+type TSBooking = {
+    id: string
+    tutorName: string;
+    tutorTitle: string
+    TutorImage: string | null;
+    categories: string[]
+    availabilitySlotDate: string
+    availabilityStartTime: string
+    availabilityEndTime: string
+    price: number;
+    status: "CONFIRMED" | "COMPLETED" | "CANCELLED" | "PENDING"
+}
+
+export type TGetAllBookingByStudentIdQueryParams = {
+    page: string
+    limit: string
+    searchTerm: string
+    bookingStatus?: "PENDING" | "CONFIRMED" | "CANCELLED" | "COMPLETED" | ""
+}
+
+export type TGetAllBookingByStudentIdResponse = {
+    bookings: TSBooking[]
+    pagination: {
+        total: number
+        page: number
+        limit: number
+        totalPages: number
+    }
+}
+
+export type TGetAllBookingByStudentIdMetaResponse = {
+    totalInvestment: number;
+    learningHours: string;
+    completedSessions: string
+}
+
+export type TGetBookingReciptByBookingIdResponse = {
+    bookingId: string;
+    invoiceId: string;
+    tutorName: string;
+    categories: string[];
+    availabilitySlotDate: string;
+    availabilitySlotStartTime: string;
+    availabilityEndTime: string;
+    duration: number;
+    status: "CONFIRMED" | "COMPLETED";
+    price: number;
+    platformServiceFee: number;
+    total: number;
+    trancationId: string;
+    paymentMethod: string;
+}
