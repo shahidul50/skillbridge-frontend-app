@@ -4,29 +4,15 @@ import * as zod from "zod";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-    Field,
-    FieldDescription,
-    FieldError,
-    FieldGroup,
-    FieldLabel
-} from "@/components/ui/field"
+import {Field, FieldError, FieldGroup, FieldLabel} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select"
+import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"
 import { useForm } from "@tanstack/react-form"
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Zod schema with password matching logic
 const formSchema = zod.object({
@@ -45,6 +31,7 @@ export function RegisterForm({
     ...props
 }: React.ComponentProps<"div">) {
 
+    const router = useRouter();
     const searchParams = useSearchParams();
     const roleParam = searchParams.get("role");
     const defaultRole = roleParam?.toUpperCase() === "TUTOR" ? "TUTOR" : roleParam?.toUpperCase() === "STUDENT" ? "STUDENT" : "";
@@ -61,19 +48,28 @@ export function RegisterForm({
             onChange: formSchema,
         },
         onSubmit: async ({ value }) => {
-            const { data, error } = await authClient.signUp.email({
-                email: value.email,
-                password: value.password,
-                name: value.name,
-                callbackURL: "/login",
-                role: value.role,
-            } as any);
+            try {
+                const { data, error } = await authClient.signUp.email({
+                    email: value.email,
+                    password: value.password,
+                    name: value.name,
+                    role: value.role,
+                } as any);
 
-            if (error) {
-                toast.error(error.message || "Registration failed!");
-            } else {
-                toast.success("Account created successfully!");
-                form.reset();
+                if (error) {
+                    toast.error(error.message || "Registration failed!");
+                } else {
+                    toast.success("Account created successfully!", {
+                        description: "We sent a verification email to your email. Please verify your email.",
+                    });
+                    
+                    setTimeout(() => {
+                        form.reset();
+                        router.push("/login");
+                    }, 2000);
+                }
+            } catch (err) {
+                toast.error("An unexpected error occurred.");
             }
         },
     })
