@@ -6,3 +6,4 @@ export * from "./bookings.type";
 export * from "./admin.type";
 export * from "./profile.type";
 export * from "./review.type"
+export * from "./student.type"
