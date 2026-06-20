@@ -46,3 +46,25 @@ type TRecentBookingItem = {
 }
 
 export type TGetRecentBookingsResponse = TRecentBookingItem[];
+
+
+// schedule types
+export type TStudentScheduleCalendarEvent = {
+    bookingId: string;
+    categoryName: string;
+    tutorName: string;
+    dateISO: string;
+    startTime: string;
+    endTime: string;
+    bookingStatus: "CONFIRMED" | "COMPLETED";
+    meetingLink: string | null;
+}
+
+export type TStudentScheduleCalendarEventResponse = {
+    calendarEvents: TStudentScheduleCalendarEvent[];
+};
+
+export type TSScheduleMetaDataResponse = {
+    todaySessionCount: number;
+    upcomingSessions: TGetUpcomingSessions[]
+}

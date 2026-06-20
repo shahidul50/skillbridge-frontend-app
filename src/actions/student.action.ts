@@ -1,6 +1,7 @@
 "use server";
 
 import { studentService } from "@/services/student.service";
+import { TScheduleEventsQueryParams } from "@/types";
 
 export async function getDashboardMetaDataAction() {
     try {
@@ -35,4 +36,14 @@ export async function getDashboardRecentBookingsAction() {
             data: null,
         };
     }
+}
+
+export async function getStudentScheduleMetaDataAction() {
+    const res = await studentService.getStudentScheduleMetaData({ cache: "no-store" });
+    return res;
+}
+
+export async function getStudentScheduleEventsDataAction(params: TScheduleEventsQueryParams) {
+    const res = await studentService.getStudentScheduleEventsData(params, { cache: "no-store" });
+    return res;
 }
