@@ -1,126 +1,121 @@
-# 🎓 SkillBridge - Connect with Expert Tutors
+# 🎓 SkillBridge - Online Tutoring Marketplace
 
-**SkillBridge** is a cutting-edge, high-performance tutoring platform built with **Next.js 16**. It bridges the gap between learners and expert mentors with a focus on real-time data handling, SEO-optimized layouts, and a seamless user experience using the latest server-side innovations.
+SkillBridge is a modern online tutoring platform where students can find expert tutors across various subjects and book sessions directly. It is a full-stack web application featuring role-based access for Admins, Tutors, and Students.
 
 ---
 
 ## 🚀 Live Demo
-[Insert your live link here, e.g., https://skillbridge-frontend.vercel.app]
 
-## 📖 Key Features
-
-### 🌍 Public Features
-- **Modern Landing Page:** Featuring a sleek Hero section, Explore Categories, Featured Tutors, "How it Works," and a global Navbar/Footer.
-- **Advanced Search & Filter:** Dynamic filtering system for tutors by subject, rating, price, and category.
-- **Tutor Profiles:** In-depth view of tutor experience, student reviews, and instant booking availability.
-
-### 👨‍🎓 Student Features
-- **Session Booking:** Effortless booking flow for tutoring sessions.
-- **Booking Management:** Real-time tracking of upcoming and past sessions.
-- **Feedback Loop:** Post-session rating and review system for quality assurance.
-- **Personalized Profile:** Manage learning preferences and account details.
-
-### 👨‍🏫 Tutor Features
-- **Dynamic Scheduling:** Set recurring availability slots and manage specific **Date Exceptions**.
-- **Subject Expertise:** Add and categorize subjects based on experience level.
-- **Performance Analytics:** Visual overview of teaching sessions, ratings, and feedback.
-- **Profile Customization:** Update professional bio, expertise, and teaching styles.
-
-### 🔑 Admin Features
-- **User Moderation:** Full control over student and tutor accounts (Ban/Unban functionality).
-- **System Oversight:** Monitor all platform-wide bookings and activities.
-- **Content Management:** Dynamically add/edit categories and configure payment gateways.
+[https://skillbridge-frontend-app.vercel.app](https://skillbridge-frontend-app.vercel.app)
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## 📖 Key Features
 
-This project is built using the **Next.js 16 ecosystem**, emphasizing server-first patterns:
+### 🌐 Core Features
 
-- **Framework:** **Next.js 16 (App Router)**
-- **Data Management:**
-  - **Server Actions:** All data mutations and fetching are handled via secure, type-safe Server Actions.
-  - **Advanced Caching:** Leverages Next.js 16's enhanced Data Cache and Request Memoization (eliminating the need for complex external state like Redux).
-- **Dashboard Layouts:** **Parallel Routes** are implemented for highly organized and simultaneous views within user dashboards.
-- **Form Handling:** **TanStack Form** (React Query Form) integrated with **Shadcn UI** and **Zod** for high-performance, type-safe validation.
-- **Styling:** Tailwind CSS with **Shadcn UI** components.
-- **Icons:** Lucide React.
+- **Modern UI/UX:** A sleek and responsive design built with TailwindCSS and Shadcn/UI.
+- **Role-Based Access Control (RBAC):** Dedicated dashboards and permissions for Admins, Tutors, and Students.
+- **Advanced Search & Filter:** Easily find tutors by subject, rating, and category.
+- **Real-time Calendar:** Integrated FullCalendar for seamless session booking and scheduling.
+- **Secure Authentication:** Robust authentication system powered by Better Auth.
+
+### 👨‍🎓 Student Dashboard
+
+- **Session Booking:** View tutor availability and book slots effortlessly.
+- **Booking History:** Track all current, upcoming, and past tutoring sessions.
+- **Profile Management:** Update personal information and account settings.
+
+### 👨‍🏫 Tutor Dashboard
+
+- **Dynamic Scheduling:** Manage weekly availability slots and set date-specific exceptions.
+- **Subject Expertise:** List and categorize teaching subjects based on expertise levels.
+- **Student Insights:** Track session bookings and view student feedback.
+
+### 🔑 Admin Panel
+
+- **User Moderation:** Full control over Student and Tutor accounts, including Ban/Unban functionality.
+- **Platform Analytics:** Monitor total sessions, user growth, and active bookings.
+- **Category Management:** Dynamically add or edit learning categories and subjects.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** TailwindCSS, Shadcn/UI, Radix UI
+- **Animations:** Framer Motion
+- **Form Management:** TanStack Form, Zod
+- **Authentication:** Better Auth
+- **Data Visualization:** Recharts
+- **Icons:** Lucide React
 
 ---
 
 ## 💻 Local Installation and Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/skillbridge-frontend.git
-    ```
+1. **Clone the repository:**
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+   ```bash
+   git clone https://github.com/shahidul50/skillbridge-frontend-app.git
+   ```
 
-3.  **Configure Environment Variables:**
-    Create a `.env.local` file and add your backend API URL:
-    ```env
-    NEXT_PUBLIC_API_URL=your_backend_api_url
-    ```
+2. **Install dependencies:**
 
-4.  **Start the server:**
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   pnpm install
+   ```
+
+   _(Alternatively, use `npm install` or `yarn install`)_
+
+3. **Configure Environment Variables:**
+   Create a `.env.local` file in the root directory and add:
+
+   ```env
+   NEXT_PUBLIC_BACKEND_URL=your_backend_url
+   AUTH_URL=your_auth_api_url
+   ```
+
+4. **Run the development server:**
+   ```bash
+   pnpm dev
+   ```
+   Open `http://localhost:3000` in your browser.
+
+---
 
 ## 🗺️ Route Overview
 
 ### 1. Public Routes
-| Route | Page | Description |
-| :--- | :--- | :--- |
-| `/` | **Home** | Navbar, Hero, Categories, Featured Tutors, How it works. |
-| `/tutors` | **Browse Tutors** | Advanced search and filterable listing. |
-| `/tutors/:id` | **Tutor Profile** | Detailed biography, reviews, and booking. |
-| `/login` | **Login** | Secure authentication portal for all roles. |
-| `/register` | **Register** | Account creation for Students and Tutors. |
 
-### 2. Student Routes (Private)
-| Route | Page | Description |
-| :--- | :--- | :--- |
-| `/dashboard` | **Overview** | Parallel route view for profile & activity stats. |
-| `/dashboard/bookings`| **My Bookings** | Full history of sessions and schedules. |
-| `/dashboard/profile` | **Profile** | Student information and settings. |
+- `/` - Landing Page
+- `/tutors` - Browse Tutors
+- `/tutors/:id` - Tutor Profile & Booking
+- `/login` / `/register` - Authentication
 
-### 3. Tutor Routes (Private)
-| Route | Page | Description |
-| :--- | :--- | :--- |
-| `/tutor-dashboard` | **Dashboard** | Teaching overview and session statistics. |
-| `/tutor-dashboard/availability` | **Availability** | Recurring weekly time slot management. |
-| `/tutor-dashboard/exceptions` | **Exceptions** | Date-specific unavailability management. |
-| `/tutor-dashboard/profile` | **Profile** | Professional bio and experience updates. |
-| `/tutor-dashboard/my-subjects` | **My Subjects** | Teaching subject and expertise management. |
+### 2. Private Routes (Protected by Role)
 
-### 4. Admin Routes (Private)
-| Route | Page | Description |
-| :--- | :--- | :--- |
-| `/admin` | **Dashboard** | Platform-wide metrics and analytics overview. |
-| `/admin/users` | **Users** | Management of all Students and Tutors. |
-| `/admin/bookings` | **Bookings** | Overview of all transactions and sessions. |
-| `/admin/categories` | **Categories** | Subject and category management. |
+- `/dashboard/*` - Student Dashboard
+- `/tutor-dashboard/*` - Tutor Dashboard
+- `/admin-dashboard/*` - Admin Panel
 
 ---
 
 ## 📂 Project Structure
+
 ```text
 src/
-├── actions/          # Next.js Server Actions (Secure Data Mutations)
-├── app/              # Next.js 16 App Router (Parallel Routes, Layouts & Pages)
-├── components/       # Shadcn UI & Custom Reusable UI Components
-├── constant/         # Global constant variables and static data
-├── lib/              # Custom library configurations and third-party setups
-├── providers/        # Global context providers (Theme, Auth, Query Providers)
-├── routes/           # Centralized management for Dashboard and Sidebar routes
-├── services/         # API Layer, business logic, and data fetching services
-├── types/            # Global TypeScript interfaces and type definitions
-└── utils/            # Shared helper functions and utility modules
+├── actions/          # Next.js Server Actions for data mutations
+├── app/              # App Router (Pages, Layouts, and API routes)
+├── components/       # Reusable UI and layout components
+├── constants/        # Application-wide roles and constants
+├── env.ts            # Environment variable validation schema
+├── hooks/            # Custom React hooks
+├── lib/              # External library configs (Auth, Utils)
+├── providers/        # Client-side context providers
+├── services/         # API service layers
+└── types/            # Global TypeScript definitions
 ```
----
 
+---
