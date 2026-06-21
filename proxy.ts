@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { Roles } from './constants/roles';
+import { Roles } from './src/constants/roles';
 
 // Auth routes that unauthenticated users can access
 const AuthRoutes = ['/login', '/register'];
@@ -15,9 +15,12 @@ const roleBasedProtectedRoutes = {
 export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // 1. Optimistic Authentication Check (Next.js 16 Proxy layer)
-    // Check for the better-auth session token or your custom authentication cookie
-    const sessionToken = request.cookies.get('better-auth.session_token')?.value || request.cookies.get('accessToken')?.value;
+    // 1. Optimistic Authentication Check
+    // Check for both dev and production (Secure) cookie names
+    const sessionToken =
+        request.cookies.get('better-auth.session_token')?.value ||
+        request.cookies.get('__Secure-better-auth.session_token')?.value ||
+        request.cookies.get('accessToken')?.value;
 
     const isAuthRoute = AuthRoutes.some((route) => pathname.startsWith(route));
 
@@ -33,14 +36,18 @@ export async function proxy(request: NextRequest) {
 
     if (sessionToken) {
         try {
+            // Note: AUTH_URL must be an absolute URL in production env variables
             const res = await fetch(`${process.env.AUTH_URL}/get-session`, {
                 headers: {
                     Cookie: request.headers.get('cookie') || ''
                 },
                 cache: "no-store"
             });
-            const sessionData = await res.json();
-            userRole = sessionData?.user?.role;
+
+            if (res.ok) {
+                const sessionData = await res.json();
+                userRole = sessionData?.user?.role;
+            }
         } catch (err) {
             console.error("Proxy session fetch error:", err);
         }
@@ -57,10 +64,15 @@ export async function proxy(request: NextRequest) {
         // Checking path authorizations
         const isAccessingAdminRoute = pathname.startsWith('/admin-dashboard');
         const isAccessingTutorRoute = pathname.startsWith('/tutor-dashboard');
-        // Need to ensure /dashboard doesn't match /admin-dashboard or /tutor-dashboard
         const isAccessingStudentRoute = pathname.startsWith('/dashboard') && !isAccessingAdminRoute && !isAccessingTutorRoute;
 
-        // Redirect if a role tries to access another role's dashboard by sending them to their own dashboard
+        // Specific task: If admin tries to access student (/dashboard) or tutor (/tutor-dashboard)
+        if (userRole === Roles.admin && (isAccessingStudentRoute || isAccessingTutorRoute)) {
+            return NextResponse.redirect(new URL('/admin-dashboard', request.url));
+        }
+
+        // Redirect if a role tries to access another role's dashboard 
+        // (e.g. Student trying to access /admin-dashboard)
         if (isAccessingAdminRoute && userRole !== Roles.admin) {
             return NextResponse.redirect(new URL(dashboardPath, request.url));
         }

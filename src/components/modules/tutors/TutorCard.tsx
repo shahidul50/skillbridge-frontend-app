@@ -54,9 +54,11 @@ function TutorCard({ tutor }: { tutor: any }) {
         </div>
 
         <div className="flex gap-2 mt-auto pt-2">
-          <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 text-xs font-bold transition-all shadow-md shadow-emerald-600/10">
+          <Link href={`/tutors/${tutor.id}`} className="block w-full">
+          <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 text-xs font-bold transition-all shadow-md shadow-emerald-600/10 cursor-pointer">
             Book Session
           </Button>
+          </Link>
           <Button asChild variant="outline" size="icon" className="size-9 rounded-lg border-muted-foreground/20 hover:border-primary hover:text-primary">
             <Link href={`/tutors/${tutor.id}`}>
               <Eye className="size-4" />

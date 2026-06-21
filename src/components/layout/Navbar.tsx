@@ -204,8 +204,14 @@ export default function Navbar() {
                                     <div className="mt-auto pt-6 flex flex-col gap-3">
                                         {!isLoggedIn ? (
                                             <>
-                                                <Button variant="outline" className="w-full rounded-xl py-6 font-semibold border-border">Login</Button>
-                                                <Button className="w-full bg-primary text-primary-foreground rounded-xl py-6 font-bold shadow-lg shadow-primary/20">Sign Up</Button>
+                                                <Link href="/login">
+                                                    <Button variant="outline" className="w-full rounded-xl py-6 font-semibold border-border cursor-pointer">
+                                                        Login
+                                                    </Button>
+                                                </Link>
+                                                <Link href="/register">
+                                                    <Button className="w-full bg-primary text-primary-foreground rounded-xl py-6 font-bold shadow-lg shadow-primary/20 cursor-pointer">Sign Up</Button>
+                                                </Link>
                                             </>
                                         ) : (
                                             <Button variant="destructive" className="w-full rounded-xl py-6 font-bold" onClick={handleLogout}>
