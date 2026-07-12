@@ -38,6 +38,15 @@ export interface ITutorSelectedCategory {
     name: string;
 }
 
+export interface ITutorReview {
+    id: string;
+    studentName: string;
+    studentImage: string;
+    rating: number;
+    comment: string;
+    timeAgo: string;
+}
+
 export interface ITutorDetails {
     id: string;
     userId: string;
@@ -50,11 +59,10 @@ export interface ITutorDetails {
     createdAt: string;
     updatedAt: string;
     user: ITutorUser;
-    reviews: any[];
+    reviews: ITutorReview[];
     tutorCategories: ITutorCategory[];
     totalClassHour: number;
     totalUniqueStudents: number;
-    tutorSelectedCategory: ITutorSelectedCategory[];
 }
 
 export interface AvailabilitySlot {

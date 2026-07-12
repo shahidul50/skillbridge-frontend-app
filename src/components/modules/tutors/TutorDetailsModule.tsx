@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Star, CheckCircle, Clock, Users } from "lucide-react";
 import BookingCard from "./BookingCard";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,33 +25,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
   const totalHours = tutor.totalClassHour;
   const totalStudents = tutor.totalUniqueStudents;
 
-  // Mock reviews matching the design
-  const mockReviews = [
-    {
-      id: 1,
-      name: "James Smith",
-      initials: "JS",
-      date: "Oct 12, 2023",
-      rating: 5,
-      text: "Alex is an incredible mentor. He doesn't just show you how to code; he explains the reasoning behind every design choice. The project-based approach helped me land my first Junior Dev role in just 4 months!"
-    },
-    {
-      id: 2,
-      name: "Maria Lopez",
-      initials: "ML",
-      date: "Sep 28, 2023",
-      rating: 5,
-      text: "Very thorough explanation of React hooks and state management. I appreciated the TDD focus. Sometimes the pace was a bit fast for a beginner, but Alex was always happy to slow down and recap."
-    },
-    {
-      id: 3,
-      name: "David Wong",
-      initials: "DW",
-      date: "Aug 15, 2023",
-      rating: 5,
-      text: "Exactly what I needed to level up my Node.js skills. The architecture sessions on microservices were a game changer for my current company project."
-    }
-  ];
+  const reviews = Array.isArray(tutor.reviews) ? tutor.reviews : [];
 
   return (
     <Container className="py-10 max-w-7xl">
@@ -150,41 +125,80 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
             </h3>
 
             <div className="divide-y divide-zinc-100 dark:divide-zinc-900 space-y-6">
-              {mockReviews.map((review) => (
-                <div key={review.id} className="pt-6 first:pt-0 space-y-3">
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="size-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center font-bold text-xs text-zinc-600 dark:text-zinc-400 shrink-0">
-                        {review.initials}
+              {reviews.length > 0 ? (
+                reviews.map((review: any) => {
+                  const initials = review.studentName
+                    ? review.studentName
+                        .split(" ")
+                        .map((n: string) => n[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()
+                    : "S";
+                  return (
+                    <div key={review.id} className="pt-6 first:pt-0 space-y-3">
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="size-10 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center font-bold text-xs text-zinc-600 dark:text-zinc-400 shrink-0 overflow-hidden relative border border-zinc-200 dark:border-zinc-800">
+                            {review.studentImage ? (
+                              <Image
+                                src={review.studentImage}
+                                alt={review.studentName || "Student"}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              initials
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-zinc-900 dark:text-white">
+                              {review.studentName || "Student"}
+                            </h4>
+                            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">
+                              {review.timeAgo || ""}
+                            </p>
+                          </div>
+                        </div>
+                        {/* Stars */}
+                        <div className="flex gap-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`size-3.5 ${
+                                i < review.rating
+                                  ? "text-amber-500 fill-amber-500"
+                                  : "text-zinc-200 dark:text-zinc-805"
+                              }`}
+                            />
+                          ))}
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-zinc-900 dark:text-white">{review.name}</h4>
-                        <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">{review.date}</p>
-                      </div>
+                      {review.comment && (
+                        <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed md:pl-13">
+                          {review.comment}
+                        </p>
+                      )}
                     </div>
-                    {/* Stars */}
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`size-3.5 ${i < review.rating ? "text-amber-500" : "text-zinc-200 dark:text-zinc-800"}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed md:pl-13">
-                    {review.text}
-                  </p>
+                  );
+                })
+              ) : (
+                <div className="text-center py-8 text-sm text-zinc-500 dark:text-zinc-400">
+                  No reviews yet. Be the first to review!
                 </div>
-              ))}
+              )}
             </div>
 
-            <Button
-              variant="outline"
-              className="w-full text-xs font-bold h-10 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 bg-transparent text-zinc-700 dark:text-zinc-300 rounded-xl cursor-pointer"
-            >
-              View All {totalReviews}+ Reviews
-            </Button>
+            {totalReviews > 10 && (
+              <Link href={`/tutors/${tutor.id}/review`} className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full text-xs font-bold h-10 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 bg-transparent text-zinc-700 dark:text-zinc-300 rounded-xl cursor-pointer"
+                >
+                  View All {totalReviews} Reviews
+                </Button>
+              </Link>
+            )}
           </Card>
         </div>
 

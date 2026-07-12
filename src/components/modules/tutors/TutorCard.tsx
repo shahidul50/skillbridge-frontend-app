@@ -1,9 +1,12 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import BookingModal from "@/components/shared/BookingModal";
 
 function TutorCard({ tutor }: { tutor: any }) {
 
@@ -54,12 +57,14 @@ function TutorCard({ tutor }: { tutor: any }) {
         </div>
 
         <div className="flex gap-2 mt-auto pt-2">
-          <Link href={`/tutors/${tutor.id}`} className="block w-full">
-          <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 text-xs font-bold transition-all shadow-md shadow-emerald-600/10 cursor-pointer">
-            Book Session
-          </Button>
-          </Link>
-          <Button asChild variant="outline" size="icon" className="size-9 rounded-lg border-muted-foreground/20 hover:border-primary hover:text-primary">
+          <div className="flex-1 min-w-0">
+            <BookingModal tutor={{ profileId: tutor.id, pricePerSession: tutor.hourlyRate, name: tutor.user.name }}>
+              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 text-xs font-bold transition-all shadow-md shadow-emerald-600/10 cursor-pointer">
+                Book Session
+              </Button>
+            </BookingModal>
+          </div>
+          <Button asChild variant="outline" size="icon" className="size-9 rounded-lg border-muted-foreground/20 hover:border-primary hover:text-primary shrink-0">
             <Link href={`/tutors/${tutor.id}`}>
               <Eye className="size-4" />
             </Link>
