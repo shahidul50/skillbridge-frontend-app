@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { Roles } from './src/constants/roles';
+import { Roles } from './constants/roles';
 
 // Auth routes that unauthenticated users can access
 const AuthRoutes = ['/login', '/register'];

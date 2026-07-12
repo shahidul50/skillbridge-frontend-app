@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-background">
       <Container className="py-12">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:grid-cols-5 md:gap-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:grid-cols-4 md:gap-8">
           
           <div className="flex flex-col gap-4 md:col-span-2">
             <Link href="/" className="flex items-center gap-2">
@@ -27,36 +27,36 @@ export function Footer() {
           <div className="flex flex-col gap-3">
             <h4 className="font-bold text-sm">COMPANY</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="#" className="hover:text-primary">About Us</Link>
-              <Link href="#" className="hover:text-primary">Careers</Link>
-              <Link href="#" className="hover:text-primary">Blog</Link>
+              <Link href="/about" className="hover:text-primary">About Us</Link>
+              {/* <Link href="#" className="hover:text-primary">Careers</Link> */}
+              <Link href="/blog" className="hover:text-primary">Blog</Link>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3">
+          {/* <div className="flex flex-col gap-3">
             <h4 className="font-bold text-sm">SUPPORT</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link href="#" className="hover:text-primary">Help Center</Link>
               <Link href="#" className="hover:text-primary">Contact</Link>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-3">
             <h4 className="font-bold text-sm">LEGAL</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="#" className="hover:text-primary">Privacy Policy</Link>
-              <Link href="#" className="hover:text-primary">Terms of Service</Link>
-              <Link href="#" className="hover:text-primary">Cookie Policy</Link>
+              <Link href="/privacy-policy" className="hover:text-primary">Privacy Policy</Link>
+              <Link href="/terms-of-service" className="hover:text-primary">Terms of Service</Link>
+              <Link href="/cookie-policy" className="hover:text-primary">Cookie Policy</Link>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-center items-center gap-4">
           <p className="text-sm text-muted-foreground">
             © {currentYear} SkillBridge. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <Link href="#" className="text-muted-foreground hover:text-foreground">
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
@@ -70,7 +70,7 @@ export function Footer() {
                 <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
               </svg>
             </Link>
-          </div>
+          </div> */}
         </div>
       </Container>
     </footer>

@@ -241,4 +241,26 @@ export const bookingService = {
       };
     }
   },
+  getBookingSuccessRate: async () => {
+    try {
+      const res = await fetch(`${API_URL}/bookings/platform-success-rate`, { next: { revalidate: 60 } });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        return {
+          error: result?.message || "Failed to fetch platform susccess rate",
+          data: null,
+        };
+      }
+
+      return { error: null, data: result?.data };
+    } catch (err) {
+      console.error(err);
+      return {
+        error: "Some error occurred while fetching platform susccess rate",
+        data: null,
+      };
+    }
+  }
 };

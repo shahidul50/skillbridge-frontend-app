@@ -29,12 +29,6 @@ import {
   Video,
   Zap
 } from "lucide-react";
-import { Roboto } from "next/font/google";
-
-const roboto = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-});
 
 interface BookingCardProps {
   tutorProfileId: string;
@@ -314,7 +308,7 @@ export default function BookingCard({ tutorProfileId, hourlyRate, tutorName }: B
                       key={index}
                       type="button"
                       onClick={() => setSelectedSlot(slot)}
-                      className={`px-3 py-2 text-center rounded-xl border ${roboto.className} text-[11px] font-bold transition-all cursor-pointer ${
+                      className={`px-3 py-2 text-center rounded-xl border text-[11px] font-bold transition-all cursor-pointer ${
                         isSlotSelected
                           ? "border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 shadow-sm"
                           : "border-zinc-250 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 bg-transparent text-zinc-700 dark:text-zinc-300"

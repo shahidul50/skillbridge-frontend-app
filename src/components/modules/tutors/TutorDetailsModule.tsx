@@ -21,7 +21,7 @@ export default function TutorDetailsModule({ tutor }: { tutor: ITutorDetails }) 
     : [];
 
   // Mock stats
-  const totalHours = tutor.totalClassHours;
+  const totalHours = tutor.totalClassHour;
   const totalStudents = tutor.totalUniqueStudents;
 
   // Mock reviews matching the design

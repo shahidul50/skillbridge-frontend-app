@@ -51,6 +51,53 @@ export function LoginForm() {
                                 <p className="text-muted-foreground text-sm">Enter credentials to access SkillBridge</p>
                             </div>
 
+                            {/* Demo Login*/}
+                             <div className="flex flex-col gap-3 mt-2">
+                                <div className="relative flex py-2 items-center">
+                                    <div className="grow border-t border-border"></div>
+                                    <span className="shrink mx-4 text-muted-foreground text-xs font-semibold uppercase tracking-wider">Login As</span>
+                                    <div className="grow border-t border-border"></div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            form.setFieldValue("email", "admin@skillbridge.com");
+                                            form.setFieldValue("password", "Password123");
+                                        }}
+                                        className="text-xs transition-colors hover:bg-primary hover:text-primary-foreground font-semibold py-1.5"
+                                    >
+                                        Admin
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            form.setFieldValue("email", "arif@tutor.com");
+                                            form.setFieldValue("password", "Password123");
+                                        }}
+                                        className="text-xs transition-colors hover:bg-primary hover:text-primary-foreground font-semibold py-1.5"
+                                    >
+                                        Tutor
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                            form.setFieldValue("email", "murad@student.com");
+                                            form.setFieldValue("password", "Password123");
+                                        }}
+                                        className="text-xs transition-colors hover:bg-primary hover:text-primary-foreground font-semibold py-1.5"
+                                    >
+                                        Student
+                                    </Button>
+                                </div>
+                            </div>
+
                             {/* Email Field */}
                             <form.Field name="email" children={(field) => {
                                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
@@ -117,6 +164,8 @@ export function LoginForm() {
                                     Sign up
                                 </Link>
                             </p>
+
+                           
                         </FieldGroup>
                     </form>
                     <div className="bg-muted relative hidden md:block">

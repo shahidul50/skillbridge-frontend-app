@@ -52,7 +52,7 @@ export interface ITutorDetails {
     user: ITutorUser;
     reviews: any[];
     tutorCategories: ITutorCategory[];
-    totalClassHours: number;
+    totalClassHour: number;
     totalUniqueStudents: number;
     tutorSelectedCategory: ITutorSelectedCategory[];
 }

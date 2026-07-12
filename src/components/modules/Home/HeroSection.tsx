@@ -9,7 +9,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 
-export default function HeroSection({ totalTutors }: { totalTutors: number }) {
+export default function HeroSection({ totalTutors, successRate }: { totalTutors: number, successRate: number }) {
   const [searchTerm, setSearchTerm] = useState("")
   const router = useRouter()
 
@@ -28,7 +28,7 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
   }
 
   return (
-    <section className="relative w-full py-12 md:py-20 lg:py-24 overflow-hidden bg-background">
+    <section className="relative w-full py-12 overflow-hidden bg-background">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Column: Content */}
@@ -54,7 +54,7 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
                 className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed"
               >
                 Master any skill with 1-on-1 personalized lessons from the world&apos;s best educators. 
-                From coding to creative arts.
+                From academic subjects to modern tech skills.
               </motion.p>
             </div>
 
@@ -94,7 +94,7 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
             >
               <div className="flex items-center gap-2 text-sm font-medium text-foreground/80">
                 <CheckCircle className="size-5 text-primary" />
-                <span>{totalTutors >=500 ? "500+" : totalTutors.toLocaleString()} Tutors</span>
+                <span>{totalTutors >=100 ? "100+" : totalTutors.toString()} Tutors</span>
               </div>
               <div className="flex items-center gap-2 text-sm font-medium text-foreground/80">
                 <CheckCircle className="size-5 text-primary" />
@@ -134,17 +134,17 @@ export default function HeroSection({ totalTutors }: { totalTutors: number }) {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute -bottom-6 -left-6 md:-left-10 bg-white p-5 rounded-2xl shadow-xl border border-border/10 max-w-55 hidden sm:block dark:bg-muted"
+              className="absolute -bottom-6 -right-3 lg:-left-10 bg-white p-5 rounded-2xl shadow-xl border border-border/10 max-w-55  sm:block dark:bg-muted"
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                   <div className="bg-sidebar-primary/10 p-2 rounded-lg dark:bg-sidebar-primary/20">
                     <GraduationCap className="size-5 text-sidebar-primary"/>
                   </div>
-                  <span className="text-xs font-bold tracking-widest text-sidebar-primary uppercase">Education</span>
+                  <span className="text-xs font-bold tracking-widest text-sidebar-primary uppercase">OUR IMPACT</span>
                 </div>
-                <p className="text-sm font-semibold text-foreground leading-snug ">
-                  98% Success rate in computer science sessions.
+                <p className="text-sm font-sans font-semibold text-foreground leading-snug ">
+                  {successRate}% Success rate in total sessions.
                 </p>
               </div>
             </motion.div>

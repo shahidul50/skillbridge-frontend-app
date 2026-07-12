@@ -25,7 +25,7 @@ const steps = [
 
 export default function HowItsWork() {
   return (
-    <section id="how-it-works" className="py-20 md:py-32 bg-slate-50/30 dark:bg-slate-900/10">
+    <section id="how-it-works" className="py-12 bg-slate-50/30 dark:bg-slate-900/10">
       <Container>
         <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
           <ScrollMotion>

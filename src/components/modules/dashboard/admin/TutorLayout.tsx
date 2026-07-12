@@ -16,9 +16,11 @@ export function TutorLayout({ data }: { data: TTutorProfileResponse }) {
               {data.tutorName?.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          <div className="absolute bottom-1 right-1 h-6 w-6 bg-emerald-500 rounded-full border-4 border-background flex items-center justify-center">
+          {
+            data.status === "Active" && <div className="absolute bottom-1 right-1 h-6 w-6 bg-emerald-500 rounded-full border-4 border-background flex items-center justify-center">
             <div className="h-2 w-2 bg-white rounded-full" />
           </div>
+          }
         </div>
         <h2 className="text-3xl font-bold mb-1">{data.tutorName}</h2>
         <p className="text-muted-foreground mb-3">{data.tutorEmail}</p>
@@ -32,7 +34,7 @@ export function TutorLayout({ data }: { data: TTutorProfileResponse }) {
         <InfoItem
           label="STATUS"
           value={data.status}
-          icon={<div className="h-2 w-2 bg-emerald-500 rounded-full mr-2" />}
+          icon={<div className={`h-2 w-2 ${data.status === "Active" ? "bg-emerald-500" : "bg-red-500" }  rounded-full mr-2`} />}
           valueClassName="text-foreground flex items-center"
         />
         <div className="col-span-full">

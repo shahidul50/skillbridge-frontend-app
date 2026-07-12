@@ -10,7 +10,7 @@ export default async function ExploreCategorySection() {
     const categories = response?.data || [];
     
     return (
-        <section className="py-12 md:py-20 bg-background overflow-hidden">
+        <section className="py-12 bg-background overflow-hidden">
             <Container>
                 {/* Header section */}
                 <ScrollMotion>

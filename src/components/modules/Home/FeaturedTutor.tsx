@@ -15,7 +15,7 @@ export default async function FeaturedTutor() {
     }
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50/50 dark:bg-background overflow-hidden">
+        <section className="py-12 bg-slate-50/50 dark:bg-background overflow-hidden">
             <Container>
                 <div className="container px-4 mx-auto">
                     <ScrollMotion>

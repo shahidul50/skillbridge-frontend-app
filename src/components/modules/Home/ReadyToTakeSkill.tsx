@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const ReadyToTakeSkill = () => {
   return (
-    <section className="py-20">
+    <section className="py-12">
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
