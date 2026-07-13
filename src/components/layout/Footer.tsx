@@ -27,9 +27,10 @@ export function Footer() {
           <div className="flex flex-col gap-3">
             <h4 className="font-bold text-sm">COMPANY</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="/about" className="hover:text-primary">About Us</Link>
+              <Link href="/about-us" className="hover:text-primary">About Us</Link>
               {/* <Link href="#" className="hover:text-primary">Careers</Link> */}
-              <Link href="/blog" className="hover:text-primary">Blog</Link>
+              <Link href="/contact-us" className="hover:text-primary">Contact Us</Link>
+              <Link href="/register?role=tutor" className="hover:text-primary">Become a Tutor</Link>
             </div>
           </div>
 
@@ -46,7 +47,7 @@ export function Footer() {
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link href="/privacy-policy" className="hover:text-primary">Privacy Policy</Link>
               <Link href="/terms-of-service" className="hover:text-primary">Terms of Service</Link>
-              <Link href="/cookie-policy" className="hover:text-primary">Cookie Policy</Link>
+              {/* <Link href="/cookie-policy" className="hover:text-primary">Cookie Policy</Link> */}
             </div>
           </div>
         </div>

@@ -125,7 +125,9 @@ export function LoginForm() {
                                 return (
                                     <Field>
                                         <div className="flex justify-between">
-                                            <FieldLabel htmlFor={field.name}>Password</FieldLabel> <Link href="#" className="text-xs text-primary">Forgot Password?</Link></div>
+                                            <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                                            {/* <Link href="#" className="text-xs text-primary">Forgot Password?</Link> */}
+                                        </div>
                                         <Input
                                             id={field.name}
                                             name={field.name}
