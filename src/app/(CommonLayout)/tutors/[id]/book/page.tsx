@@ -3,9 +3,29 @@ import BookingModule from "@/components/modules/book/BookingModule";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
 import { getUserSession } from "@/actions/auth.action";
+import { Metadata } from "next";
 
 interface IBookPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: IBookPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const response = await getTutorProfileByProfileId(resolvedParams.id);
+  const tutor = response?.data;
+
+  if (!tutor) {
+    return {
+      title: "Book Tutor | SkillBridge",
+    };
+  }
+
+  const tutorName = tutor?.user?.fullName || tutor?.user?.name || "Tutor";
+  
+  return {
+    title: `Book ${tutorName} | SkillBridge`,
+    description: `Book a learning session with ${tutorName} on SkillBridge. Select a time and enhance your skills.`,
+  };
 }
 
 async function BookPage({ params }: IBookPageProps) {

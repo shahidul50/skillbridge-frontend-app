@@ -2,9 +2,29 @@ import { getTutorProfileByProfileId } from "@/actions/tutor.action";
 import TutorDetailsModule from "@/components/modules/tutors/TutorDetailsModule";
 import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
 
 interface ITutorDetailsPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: ITutorDetailsPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const response = await getTutorProfileByProfileId(resolvedParams.id);
+  const tutor = response?.data;
+
+  if (!tutor) {
+    return {
+      title: "Tutor Not Found | SkillBridge",
+    };
+  }
+
+  const tutorName = tutor?.user?.fullName || tutor?.user?.name || "Tutor Profile";
+  
+  return {
+    title: `${tutorName} | SkillBridge`,
+    description: `View ${tutorName}'s profile and book your next session on SkillBridge.`,
+  };
 }
  
 async function TutorDetailsPage({ params }: ITutorDetailsPageProps) {

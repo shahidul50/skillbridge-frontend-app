@@ -4,6 +4,12 @@ import { Container } from "@/components/layout/Container"
 import { getAllTutor } from "@/actions/tutor.action";
 import { getAllCategory } from "@/actions/categories.action";
 import { GetTutorParams } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Find Tutors | SkillBridge",
+  description: "Browse and find the best tutors for your learning needs on SkillBridge. Filter by category, subject, and availability.",
+}
 
 interface ITutorsPageProps {
   searchParams: Promise<GetTutorParams>;

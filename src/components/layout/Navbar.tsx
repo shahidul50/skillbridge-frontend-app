@@ -81,7 +81,7 @@ export default function Navbar() {
                 </Link>
 
                 {/* --- CENTER: Desktop Navigation --- */}
-                <nav className="hidden md:flex items-center gap-8">
+                <nav className="hidden lg:flex items-center gap-8">
                     {navLinks.map((link) => (
                         <Link
                             key={link.title}
@@ -96,7 +96,7 @@ export default function Navbar() {
                 {/* --- RIGHT: Actions --- */}
                 <div className="flex items-center gap-3">
 
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden lg:flex items-center gap-4">
                         {/* Theme Toggle Example */}
                         <ModeToggle />
 
@@ -164,7 +164,7 @@ export default function Navbar() {
                     </div>
 
                     {/* --- Mobile Menu Trigger --- */}
-                    <div className="md:hidden">
+                    <div className="lg:hidden">
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-10 w-10">

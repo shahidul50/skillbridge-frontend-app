@@ -4,6 +4,12 @@ import { CategoryCard } from "@/components/modules/categories/CategoryCard";
 import { CategorySearch } from "@/components/modules/categories/CategorySearch";
 import { CategoryPagination } from "@/components/modules/categories/CategoryPagination";
 import { ScrollMotion } from "@/components/motion/ScrollMotion";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Categories | Explore SkillBridge Subjects",
+  description: "Browse all curated learning categories and subjects available on SkillBridge. Find the perfect topic to master with our expert tutors.",
+};
 
 interface CategoriesPageProps {
   searchParams: Promise<{

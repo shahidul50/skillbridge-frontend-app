@@ -1,7 +1,12 @@
 import { RegisterForm } from "@/components/modules/authentication/register-form"
 import { Loader } from "@/components/shared/Loader"
 import { Suspense } from "react"
+import { Metadata } from "next"
 
+export const metadata: Metadata = {
+  title: "Register | Join SkillBridge",
+  description: "Create your SkillBridge account to start learning or teaching. Join our community of expert tutors and motivated students.",
+}
 
 function RegisterPage() {
   return (

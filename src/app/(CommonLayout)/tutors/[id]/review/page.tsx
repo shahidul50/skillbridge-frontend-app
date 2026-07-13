@@ -1,11 +1,32 @@
 import { getAllReviewStatsByTutorProfileIdAction, getAllReviewByTutorProfileIdAction } from "@/actions/review.action";
+import { getTutorProfileByProfileId } from "@/actions/tutor.action";
 import { Container } from "@/components/layout/Container";
 import ReviewModule from "@/components/modules/tutors/ReviewModule";
+import { Metadata } from "next";
 
 type TProps = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+
+export async function generateMetadata({ params }: TProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const response = await getTutorProfileByProfileId(resolvedParams.id);
+  const tutor = response?.data;
+
+  if (!tutor) {
+    return {
+      title: "Reviews Not Found | SkillBridge",
+    };
+  }
+
+  const tutorName = tutor?.user?.fullName || tutor?.user?.name || "Tutor";
+  
+  return {
+    title: `Reviews for ${tutorName} | SkillBridge`,
+    description: `Read what students are saying about ${tutorName} on SkillBridge. Check out their ratings and student feedback.`,
+  };
+}
 
 export default async function TutorReviewPage({ params, searchParams }: TProps) {
   const resolvedParams = await params;

@@ -5,7 +5,12 @@ import { tutorService } from "@/services/tutor.service"
 import HowItsWork from "@/components/modules/Home/HowItsWork"
 import ReadyToTakeSkill from "@/components/modules/Home/ReadyToTakeSkill"
 import { bookingService } from "@/services/booking.service"
+import { Metadata } from "next"
 
+export const metadata: Metadata = {
+  title: "SkillBridge | Learn from Expert Tutors",
+  description: "SkillBridge is the ultimate platform for students to connect with expert tutors. Improve your skills with personalized one-on-one sessions.",
+}
 export default async function Home() {
   const { data: tutors } = await tutorService.getAllTutor(undefined, { revalidate: 10 });
   const totalTutors = tutors?.pagination?.total || 0;
