@@ -31,7 +31,7 @@ const navLinks = [
     { title: "Categories", href: "/categories" },
     { title: "How it Works", href: "/#how-it-works" },
     { title: "About Us", href: "/about-us" },
-    { title: "Contact", href: "/contact" },
+    { title: "Contact", href: "/contact-us" },
 ];
 
 export default function Navbar() {
