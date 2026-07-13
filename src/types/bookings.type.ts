@@ -60,3 +60,12 @@ export type TGetBookingReciptByBookingIdResponse = {
     trancationId: string;
     paymentMethod: string;
 }
+
+
+//about-us stats type
+export type TGetAboutUsStatsResponse = {
+    activeStudent: number;
+    expertTutors: number;
+    totalSessions: number;
+    successRate: number;
+}

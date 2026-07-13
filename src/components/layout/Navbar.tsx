@@ -30,6 +30,8 @@ const navLinks = [
     { title: "Find Tutors", href: "/tutors" },
     { title: "Categories", href: "/categories" },
     { title: "How it Works", href: "/#how-it-works" },
+    { title: "About Us", href: "/about-us" },
+    { title: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {

@@ -6,7 +6,7 @@ import {
   TGetAllBookingByStudentIdResponse,
   TGetAllBookingByStudentIdMetaResponse,
 } from "@/types";
-import { TGetBookingReciptByBookingIdResponse } from "@/types/bookings.type";
+import { TGetAboutUsStatsResponse, TGetBookingReciptByBookingIdResponse } from "@/types/bookings.type";
 import { TBookingParams, TBookingReciptResponse, TBookingResponse, TBookingStatsResponse } from "@/types/admin.type";
 import { cookies } from "next/headers";
 
@@ -259,6 +259,29 @@ export const bookingService = {
       console.error(err);
       return {
         error: "Some error occurred while fetching platform susccess rate",
+        data: null,
+      };
+    }
+  },
+
+  getAboutUsStats: async () => {
+    try {
+      const res = await fetch(`${API_URL}/bookings/about-us/stats`, { next: { revalidate: 60 } });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        return {
+          error: result?.message || "Failed to fetch platform stats",
+          data: null,
+        };
+      }
+
+      return { error: null, data: result?.data as TGetAboutUsStatsResponse };
+    } catch (err) {
+      console.error(err);
+      return {
+        error: "Some error occurred while fetching platform stats",
         data: null,
       };
     }
