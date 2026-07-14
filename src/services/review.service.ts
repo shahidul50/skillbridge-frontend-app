@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { TCreateReviewBodyData, TCreateReviewResponse, TGetAllBookingWithReviewQueryParams, TGetAllBookingWithReviewResponse, TGetAllReviewStatsByTutorProfileIdResponse, TGetAllReviewByTutorProfileIdQueryParams, TGetAllReviewByTutorProfileIdResponse } from "@/types/review.type";
+import { TCreateReviewBodyData, TCreateReviewResponse, TGetAllBookingWithReviewQueryParams, TGetAllBookingWithReviewResponse, TGetAllReviewStatsByTutorProfileIdResponse, TGetAllReviewByTutorProfileIdQueryParams, TGetAllReviewByTutorProfileIdResponse, TFeaturesReviewResponse } from "@/types/review.type";
 import { cookies } from "next/headers";
 
 const API_URL = env.API_URL;
@@ -131,4 +131,28 @@ export const reviewService = {
             };
         }
     },
+    getFeaturedReviews: async () => {
+        try {
+            const res = await fetch(`${API_URL}/reviews/featured`, {
+                next: { revalidate: 60, tags: ["featured-reviews"] }
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                return {
+                    error: result?.message || "Failed to fetch featured reviews",
+                    data: null,
+                };
+            }
+
+            return { error: null, data: result?.data as TFeaturesReviewResponse[] };
+        } catch (err) {
+            console.error(err);
+            return {
+                error: "Some error occurred while fetching featured reviews",
+                data: null,
+            };
+        }
+    }
 };
